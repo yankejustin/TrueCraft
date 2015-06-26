@@ -52,8 +52,15 @@
     <Compile Include="Graphics\Color.cs" />
     <Compile Include="Graphics\GraphicsComponent.cs" />
     <Compile Include="Graphics\GraphicsException.cs" />
+    <Compile Include="Graphics\Matrix.cs" />
     <Compile Include="Graphics\OpenGL\ErrorCode.cs" />
+    <Compile Include="Graphics\OpenGL\IUniform.cs" />
     <Compile Include="Graphics\OpenGL\OpenGLException.cs" />
+    <Compile Include="Graphics\OpenGL\Shader.cs" />
+    <Compile Include="Graphics\OpenGL\ShaderEventArgs.cs" />
+    <Compile Include="Graphics\OpenGL\ShaderProgram.cs" />
+    <Compile Include="Graphics\OpenGL\ShaderType.cs" />
+    <Compile Include="Graphics\OpenGL\Uniform.cs" />
     <Compile Include="ICancellable.cs" />
     <Compile Include="Input\Key.cs" />
     <Compile Include="Input\KeyboardComponent.cs" />
@@ -67,6 +74,9 @@
     <Compile Include="Input\MouseMoveEventArgs.cs" />
     <Compile Include="Input\MouseScrollEventArgs.cs" />
     <Compile Include="SafeHandle.cs" />
+    <Compile Include="Vector2.cs" />
+    <Compile Include="Vector3.cs" />
+    <Compile Include="Vector4.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
