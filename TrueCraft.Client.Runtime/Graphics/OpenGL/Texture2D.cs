@@ -37,6 +37,19 @@ namespace TrueCraft.Client.Graphics.OpenGL
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static Texture2D FromFile(string path)
+        {
+            var texture = new Texture2D();
+            using (var image = Image.FromFile(path))
+                texture.SetBitmap((Bitmap)image);
+            return texture;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         protected override TextureTarget Target
         {
             get { return TextureTarget.Texture2D; }
