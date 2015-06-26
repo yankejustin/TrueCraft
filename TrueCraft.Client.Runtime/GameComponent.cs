@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Collections.Concurrent;
 
 namespace TrueCraft.Client
 {
@@ -21,6 +22,7 @@ namespace TrueCraft.Client
 
         private Game _game;
         private bool _isEnabled;
+        private ConcurrentQueue<Action> _onUpdate, _onRender;
         private bool _isDisposed;
 
         /// <summary>
@@ -94,7 +96,41 @@ namespace TrueCraft.Client
 
             _game = game;
             IsEnabled = true;
+            _onUpdate = new ConcurrentQueue<Action>();
+            _onRender = new ConcurrentQueue<Action>();
             _isDisposed = false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="mode"></param>
+        public void Invoke(Action action, InvocationMode mode = InvocationMode.Async)
+        {
+            if (_isDisposed)
+                throw new ObjectDisposedException(GetType().Name);
+
+            if (action == null)
+                throw new ArgumentException();
+
+            switch (mode)
+            {
+                case InvocationMode.Async:
+                    ThreadPool.QueueUserWorkItem((state) => { action.Invoke(); }, null);
+                    break;
+
+                case InvocationMode.OnUpdate:
+                    _onUpdate.Enqueue(action);
+                    break;
+
+                case InvocationMode.OnRender:
+                    _onRender.Enqueue(action);
+                    break;
+
+                default:
+                    throw new Exception();
+            }
         }
 
         /// <summary>
@@ -118,14 +154,24 @@ namespace TrueCraft.Client
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected virtual void OnUpdate(object sender, FrameEventArgs e) { }
+        protected virtual void OnUpdate(object sender, FrameEventArgs e)
+        {
+            var item = default(Action);
+            while (_onUpdate.TryDequeue(out item))
+                item.Invoke();
+        }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected virtual void OnRender(object sender, FrameEventArgs e) { }
+        protected virtual void OnRender(object sender, FrameEventArgs e)
+        {
+            var item = default(Action);
+            while (_onRender.TryDequeue(out item))
+                item.Invoke();
+        }
 
         /// <summary>
         /// 
@@ -137,6 +183,7 @@ namespace TrueCraft.Client
             {
                 IsEnabled = false;
                 _game = null;
+                _onUpdate = null; _onRender = null;
                 _isDisposed = true;
             }
         }
