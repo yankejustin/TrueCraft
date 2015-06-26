@@ -5,6 +5,7 @@ using OpenTK.Graphics;
 
 using TrueCraft;
 using TrueCraft.Client;
+using TrueCraft.Client.Input;
 
 namespace TrueCraft.Client
 {
@@ -33,6 +34,8 @@ namespace TrueCraft.Client
         private string[] _arguments;
         private GameWindow _window;
         private double _updateTime, _renderTime;
+        private MouseComponent _mouseComponent;
+        private KeyboardComponent _keyboardComponent;
         private bool _isDisposed;
 
         /// <summary>
@@ -74,6 +77,34 @@ namespace TrueCraft.Client
                     throw new ObjectDisposedException(GetType().Name);
 
                 return _window;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public MouseComponent MouseComponent
+        {
+            get
+            {
+                if (this._isDisposed)
+                    throw new ObjectDisposedException(GetType().Name);
+
+                return this._mouseComponent;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public KeyboardComponent KeyboardComponent
+        {
+            get
+            {
+                if (this._isDisposed)
+                    throw new ObjectDisposedException(GetType().Name);
+
+                return this._keyboardComponent;
             }
         }
 
@@ -168,7 +199,13 @@ namespace TrueCraft.Client
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected virtual void OnLoad(object sender, EventArgs e) { }
+        protected virtual void OnLoad(object sender, EventArgs e)
+        {
+            this._mouseComponent = new MouseComponent(this);
+            this._mouseComponent.IsEnabled = true;
+            this._keyboardComponent = new KeyboardComponent(this);
+            this._keyboardComponent.IsEnabled = true;
+        }
 
         /// <summary>
         /// 
@@ -189,7 +226,13 @@ namespace TrueCraft.Client
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected virtual void OnUnload(object sender, EventArgs e) { }
+        protected virtual void OnUnload(object sender, EventArgs e)
+        {
+            this._keyboardComponent.IsEnabled = false;
+            this._keyboardComponent.Dispose();
+            this._mouseComponent.IsEnabled = false;
+            this._mouseComponent.Dispose();
+        }
 
         /// <summary>
         /// 
