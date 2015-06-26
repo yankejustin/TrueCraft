@@ -1,8 +1,8 @@
 ﻿using System;
 
-using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using TrueCraft.Client.Maths;
 
 using TrueCraft.Client;
 

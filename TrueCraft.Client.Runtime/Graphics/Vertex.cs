@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime;
 using System.Runtime.InteropServices;
+using TrueCraft.Client.Maths;
 
 namespace TrueCraft.Client.Graphics
 {

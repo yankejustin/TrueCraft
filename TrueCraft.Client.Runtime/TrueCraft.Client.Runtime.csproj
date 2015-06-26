@@ -52,7 +52,6 @@
     <Compile Include="Graphics\Color.cs" />
     <Compile Include="Graphics\GraphicsComponent.cs" />
     <Compile Include="Graphics\GraphicsException.cs" />
-    <Compile Include="Graphics\Matrix.cs" />
     <Compile Include="Graphics\Mesh.cs" />
     <Compile Include="Graphics\OpenGL\BufferUsage.cs" />
     <Compile Include="Graphics\OpenGL\ErrorCode.cs" />
@@ -80,9 +79,21 @@
     <Compile Include="Input\MouseScrollEventArgs.cs" />
     <Compile Include="InvocationMode.cs" />
     <Compile Include="SafeHandle.cs" />
-    <Compile Include="Vector2.cs" />
-    <Compile Include="Vector3.cs" />
-    <Compile Include="Vector4.cs" />
+    <Compile Include="Maths\BoundingBox.cs" />
+    <Compile Include="Maths\BoundingFrustum.cs" />
+    <Compile Include="Maths\BoundingSphere.cs" />
+    <Compile Include="Maths\ContainmentType.cs" />
+    <Compile Include="Maths\MathHelper.cs" />
+    <Compile Include="Maths\Matrix.cs" />
+    <Compile Include="Maths\Plane.cs" />
+    <Compile Include="Maths\PlaneIntersectionType.cs" />
+    <Compile Include="Maths\Point.cs" />
+    <Compile Include="Maths\Quaternion.cs" />
+    <Compile Include="Maths\Ray.cs" />
+    <Compile Include="Maths\Rectangle.cs" />
+    <Compile Include="Maths\Vector2.cs" />
+    <Compile Include="Maths\Vector3.cs" />
+    <Compile Include="Maths\Vector4.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
