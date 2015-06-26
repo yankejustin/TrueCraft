@@ -49,6 +49,9 @@
     <Compile Include="FrameEventArgs.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameComponent.cs" />
+    <Compile Include="Graphics\Color.cs" />
+    <Compile Include="Graphics\GraphicsComponent.cs" />
+    <Compile Include="Graphics\GraphicsException.cs" />
     <Compile Include="ICancellable.cs" />
     <Compile Include="Input\Key.cs" />
     <Compile Include="Input\KeyboardComponent.cs" />
@@ -61,7 +64,9 @@
     <Compile Include="Input\MouseEventArgs.cs" />
     <Compile Include="Input\MouseMoveEventArgs.cs" />
     <Compile Include="Input\MouseScrollEventArgs.cs" />
+    <Compile Include="SafeHandle.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

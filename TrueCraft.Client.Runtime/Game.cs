@@ -6,6 +6,7 @@ using OpenTK.Graphics;
 using TrueCraft;
 using TrueCraft.Client;
 using TrueCraft.Client.Input;
+using TrueCraft.Client.Graphics;
 
 namespace TrueCraft.Client
 {
@@ -34,6 +35,7 @@ namespace TrueCraft.Client
         private string[] _arguments;
         private GameWindow _window;
         private double _updateTime, _renderTime;
+        private GraphicsComponent _graphicsComponent;
         private MouseComponent _mouseComponent;
         private KeyboardComponent _keyboardComponent;
         private bool _isDisposed;
@@ -77,6 +79,20 @@ namespace TrueCraft.Client
                     throw new ObjectDisposedException(GetType().Name);
 
                 return _window;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public GraphicsComponent GraphicsComponent
+        {
+            get
+            {
+                if (_isDisposed)
+                    throw new ObjectDisposedException(GetType().Name);
+
+                return _graphicsComponent;
             }
         }
 
@@ -201,6 +217,8 @@ namespace TrueCraft.Client
         /// <param name="e"></param>
         protected virtual void OnLoad(object sender, EventArgs e)
         {
+            _graphicsComponent = new GraphicsComponent(this);
+            _graphicsComponent.IsEnabled = true;
             _mouseComponent = new MouseComponent(this);
             _mouseComponent.IsEnabled = true;
             _keyboardComponent = new KeyboardComponent(this);
@@ -232,6 +250,8 @@ namespace TrueCraft.Client
             _keyboardComponent.Dispose();
             _mouseComponent.IsEnabled = false;
             _mouseComponent.Dispose();
+            _graphicsComponent.IsEnabled = false;
+            _graphicsComponent.Dispose();
         }
 
         /// <summary>
