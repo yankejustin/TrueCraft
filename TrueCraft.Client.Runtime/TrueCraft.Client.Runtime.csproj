@@ -39,6 +39,7 @@
       <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -63,6 +64,9 @@
     <Compile Include="Graphics\OpenGL\ShaderEventArgs.cs" />
     <Compile Include="Graphics\OpenGL\ShaderProgram.cs" />
     <Compile Include="Graphics\OpenGL\ShaderType.cs" />
+    <Compile Include="Graphics\OpenGL\Texture.cs" />
+    <Compile Include="Graphics\OpenGL\Texture2D.cs" />
+    <Compile Include="Graphics\OpenGL\TextureTarget.cs" />
     <Compile Include="Graphics\OpenGL\Uniform.cs" />
     <Compile Include="Graphics\OpenGL\VertexBuffer.cs" />
     <Compile Include="Graphics\Vertex.cs" />
