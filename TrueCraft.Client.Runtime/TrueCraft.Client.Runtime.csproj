@@ -53,6 +53,8 @@
     <Compile Include="Graphics\GraphicsComponent.cs" />
     <Compile Include="Graphics\GraphicsException.cs" />
     <Compile Include="Graphics\Matrix.cs" />
+    <Compile Include="Graphics\Mesh.cs" />
+    <Compile Include="Graphics\MeshState.cs" />
     <Compile Include="Graphics\OpenGL\BufferUsage.cs" />
     <Compile Include="Graphics\OpenGL\ErrorCode.cs" />
     <Compile Include="Graphics\OpenGL\IndexBuffer.cs" />
@@ -77,6 +79,7 @@
     <Compile Include="Input\MouseEventArgs.cs" />
     <Compile Include="Input\MouseMoveEventArgs.cs" />
     <Compile Include="Input\MouseScrollEventArgs.cs" />
+    <Compile Include="InvocationMode.cs" />
     <Compile Include="SafeHandle.cs" />
     <Compile Include="Vector2.cs" />
     <Compile Include="Vector3.cs" />
