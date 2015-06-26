@@ -5,6 +5,7 @@ namespace TrueCraft.Client.Input
     /// <summary>
     /// 
     /// </summary>
+    /// <remarks>Enumeration values taken from the OpenTK project. [https://github.com/opentk/opentk/]</remarks>
     public enum MouseButton
         : int
     {
