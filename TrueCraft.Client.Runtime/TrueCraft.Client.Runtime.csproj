@@ -53,7 +53,9 @@
     <Compile Include="Graphics\GraphicsComponent.cs" />
     <Compile Include="Graphics\GraphicsException.cs" />
     <Compile Include="Graphics\Matrix.cs" />
+    <Compile Include="Graphics\OpenGL\BufferUsage.cs" />
     <Compile Include="Graphics\OpenGL\ErrorCode.cs" />
+    <Compile Include="Graphics\OpenGL\IndexBuffer.cs" />
     <Compile Include="Graphics\OpenGL\IUniform.cs" />
     <Compile Include="Graphics\OpenGL\OpenGLException.cs" />
     <Compile Include="Graphics\OpenGL\Shader.cs" />
@@ -61,6 +63,8 @@
     <Compile Include="Graphics\OpenGL\ShaderProgram.cs" />
     <Compile Include="Graphics\OpenGL\ShaderType.cs" />
     <Compile Include="Graphics\OpenGL\Uniform.cs" />
+    <Compile Include="Graphics\OpenGL\VertexBuffer.cs" />
+    <Compile Include="Graphics\Vertex.cs" />
     <Compile Include="ICancellable.cs" />
     <Compile Include="Input\Key.cs" />
     <Compile Include="Input\KeyboardComponent.cs" />
