@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Runtime;
+using System.Runtime.InteropServices;
 
 using OpenTK;
 using OpenTK.Graphics;
@@ -148,7 +150,19 @@ namespace TrueCraft.Client.Graphics
             if ((index < 0) || (index > _indices.Length))
                 throw new ArgumentException();
 
-            _vertices.Bind();
+            if (!_vertices.IsBound)
+            {
+                _vertices.Bind();
+                GL.EnableVertexAttribArray(0);
+                GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, Marshal.SizeOf(typeof(Vertex)), 0);
+                GL.EnableVertexAttribArray(1);
+                GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, Marshal.SizeOf(typeof(Vertex)), 12);
+                GL.EnableVertexAttribArray(2);
+                GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Byte, false, Marshal.SizeOf(typeof(Vertex)), 24);
+                GL.EnableVertexAttribArray(3);
+                GL.VertexAttribPointer(3, 2, VertexAttribPointerType.Float, false, Marshal.SizeOf(typeof(Vertex)), 28);
+                OpenGLException.CheckErrors();
+            }
             _indices[index].Bind();
             GL.DrawElements(
                 PrimitiveType.Triangles,
