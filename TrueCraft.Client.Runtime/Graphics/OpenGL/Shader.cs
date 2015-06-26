@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 using OpenTK;
 using OpenTK.Graphics;
@@ -12,6 +13,18 @@ namespace TrueCraft.Client.Graphics.OpenGL
     public sealed class Shader
         : SafeHandle
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static Shader FromFile(ShaderType type, string path)
+        {
+            var source = File.ReadAllText(path);
+            return new Shader(type, source);
+        }
+
         private ShaderType _type;
         private string _source;
         private bool _isCompiled;
