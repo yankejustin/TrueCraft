@@ -201,10 +201,10 @@ namespace TrueCraft.Client
         /// <param name="e"></param>
         protected virtual void OnLoad(object sender, EventArgs e)
         {
-            this._mouseComponent = new MouseComponent(this);
-            this._mouseComponent.IsEnabled = true;
-            this._keyboardComponent = new KeyboardComponent(this);
-            this._keyboardComponent.IsEnabled = true;
+            _mouseComponent = new MouseComponent(this);
+            _mouseComponent.IsEnabled = true;
+            _keyboardComponent = new KeyboardComponent(this);
+            _keyboardComponent.IsEnabled = true;
         }
 
         /// <summary>
@@ -228,10 +228,10 @@ namespace TrueCraft.Client
         /// <param name="e"></param>
         protected virtual void OnUnload(object sender, EventArgs e)
         {
-            this._keyboardComponent.IsEnabled = false;
-            this._keyboardComponent.Dispose();
-            this._mouseComponent.IsEnabled = false;
-            this._mouseComponent.Dispose();
+            _keyboardComponent.IsEnabled = false;
+            _keyboardComponent.Dispose();
+            _mouseComponent.IsEnabled = false;
+            _mouseComponent.Dispose();
         }
 
         /// <summary>
