@@ -5,7 +5,6 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
 using TrueCraft.Client;
-using TrueCraft.Client.Utilities;
 
 namespace TrueCraft.Client.Graphics.OpenGL
 {
