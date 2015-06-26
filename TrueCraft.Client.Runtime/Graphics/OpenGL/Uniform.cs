@@ -101,6 +101,11 @@ namespace TrueCraft.Client.Graphics.OpenGL
                 var cast = TryCast<float>(value);
                 GL.Uniform1((int)_handle, cast);
             }
+            else if (value is int)
+            {
+                var cast = TryCast<int>(value);
+                GL.Uniform1((int)_handle, cast);
+            }
             else if (value is Vector2)
             {
                 var cast = TryCast<Vector2>(value);
