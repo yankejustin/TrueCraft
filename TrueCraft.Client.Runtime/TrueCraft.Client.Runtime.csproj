@@ -52,6 +52,8 @@
     <Compile Include="Graphics\Color.cs" />
     <Compile Include="Graphics\GraphicsComponent.cs" />
     <Compile Include="Graphics\GraphicsException.cs" />
+    <Compile Include="Graphics\OpenGL\ErrorCode.cs" />
+    <Compile Include="Graphics\OpenGL\OpenGLException.cs" />
     <Compile Include="ICancellable.cs" />
     <Compile Include="Input\Key.cs" />
     <Compile Include="Input\KeyboardComponent.cs" />
