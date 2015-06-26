@@ -87,10 +87,10 @@ namespace TrueCraft.Client
         {
             get
             {
-                if (this._isDisposed)
+                if (_isDisposed)
                     throw new ObjectDisposedException(GetType().Name);
 
-                return this._mouseComponent;
+                return _mouseComponent;
             }
         }
 
@@ -101,10 +101,10 @@ namespace TrueCraft.Client
         {
             get
             {
-                if (this._isDisposed)
+                if (_isDisposed)
                     throw new ObjectDisposedException(GetType().Name);
 
-                return this._keyboardComponent;
+                return _keyboardComponent;
             }
         }
 
