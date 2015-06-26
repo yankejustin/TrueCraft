@@ -69,6 +69,7 @@
     <Compile Include="Graphics\OpenGL\TextureTarget.cs" />
     <Compile Include="Graphics\OpenGL\Uniform.cs" />
     <Compile Include="Graphics\OpenGL\VertexBuffer.cs" />
+    <Compile Include="Graphics\SpriteRenderer.cs" />
     <Compile Include="Graphics\Vertex.cs" />
     <Compile Include="ICancellable.cs" />
     <Compile Include="Input\Key.cs" />
