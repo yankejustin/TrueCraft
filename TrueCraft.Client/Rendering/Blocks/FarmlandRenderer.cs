@@ -1,8 +1,8 @@
 ﻿using System;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 using TrueCraft.Core.Logic.Blocks;
 using TrueCraft.API.Logic;
+using TrueCraft.Client.Maths;
+using TrueCraft.Client.Graphics;
 
 namespace TrueCraft.Client.Rendering.Blocks
 {
@@ -90,8 +90,8 @@ namespace TrueCraft.Client.Rendering.Blocks
                 SideTexture + Vector2.UnitX,
             };
 
-        public override VertexPositionNormalColorTexture[] Render(BlockDescriptor descriptor, Vector3 offset,
-            Tuple<int, int> textureMap, int indiciesOffset, out int[] indicies)
+        public override Vertex[] Render(BlockDescriptor descriptor, Vector3 offset,
+            Tuple<int, int> textureMap, int indiciesOffset, out ushort[] indicies)
         {
             var texture = DryTexture;
             if (descriptor.Metadata == (byte)FarmlandBlock.MoistureLevel.Moist)

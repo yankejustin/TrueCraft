@@ -13,23 +13,11 @@ namespace TrueCraft.Client
     /// <summary>
     /// 
     /// </summary>
-    public abstract class Game
-        : IDisposable
+    public abstract class Game : IDisposable
     {
-        /// <summary>
-        /// 
-        /// </summary>
         public event EventHandler<DisposedEventArgs> Disposed;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        internal event EventHandler<FrameEventArgs> Update;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        internal event EventHandler<FrameEventArgs> Render;
+        public event EventHandler<FrameEventArgs> Update;
+        public event EventHandler<FrameEventArgs> Render;
 
         private bool _isRunning;
         private string[] _arguments;
@@ -40,9 +28,6 @@ namespace TrueCraft.Client
         private KeyboardComponent _keyboardComponent;
         private bool _isDisposed;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsRunning
         {
             get
@@ -54,9 +39,6 @@ namespace TrueCraft.Client
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public string[] Arguments
         {
             get
@@ -68,10 +50,7 @@ namespace TrueCraft.Client
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        internal GameWindow Window
+        public GameWindow Window
         {
             get
             {
@@ -82,9 +61,6 @@ namespace TrueCraft.Client
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public GraphicsComponent GraphicsComponent
         {
             get
@@ -96,9 +72,6 @@ namespace TrueCraft.Client
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public MouseComponent MouseComponent
         {
             get
@@ -110,9 +83,6 @@ namespace TrueCraft.Client
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public KeyboardComponent KeyboardComponent
         {
             get
@@ -124,21 +94,11 @@ namespace TrueCraft.Client
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsDisposed
         {
             get { return _isDisposed; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <param name="title"></param>
-        /// <param name="isFullscreen"></param>
         protected Game(int width, int height, string title, bool isFullscreen = false)
         {
             _isRunning = false;
@@ -155,10 +115,6 @@ namespace TrueCraft.Client
             _window.Unload += OnUnload;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="args"></param>
         public void Run(params string[] args)
         {
             if (_isDisposed)
@@ -168,12 +124,13 @@ namespace TrueCraft.Client
             {
                 try
                 {
+                    Initialize();
+
                     _isRunning = true;
                     _arguments = args;
 
-                    _window.Run(20.0);
+                    _window.Run(60.0); // I think this is updates per second?
                 }
-                catch { throw; }
                 finally
                 {
                     _arguments = null;
@@ -182,9 +139,6 @@ namespace TrueCraft.Client
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void Quit()
         {
             if (_isDisposed)
@@ -194,9 +148,6 @@ namespace TrueCraft.Client
                 _window.Close();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void Dispose()
         {
             var args = new DisposedEventArgs(_isDisposed);
@@ -210,11 +161,6 @@ namespace TrueCraft.Client
             GC.SuppressFinalize(this);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         protected virtual void OnLoad(object sender, EventArgs e)
         {
             _graphicsComponent = new GraphicsComponent(this);
@@ -225,25 +171,10 @@ namespace TrueCraft.Client
             _keyboardComponent.IsEnabled = true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         protected virtual void OnUpdate(object sender, FrameEventArgs e) { }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         protected virtual void OnRender(object sender, FrameEventArgs e) { }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         protected virtual void OnUnload(object sender, EventArgs e)
         {
             _keyboardComponent.IsEnabled = false;
@@ -254,10 +185,6 @@ namespace TrueCraft.Client
             _graphicsComponent.Dispose();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
@@ -275,11 +202,6 @@ namespace TrueCraft.Client
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void OnUpdateFrame(object sender, OpenTK.FrameEventArgs e)
         {
             _updateTime += e.Time;
@@ -290,11 +212,6 @@ namespace TrueCraft.Client
                 Update(this, args);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void OnRenderFrame(object sender, OpenTK.FrameEventArgs e)
         {
             _renderTime += e.Time;
@@ -307,9 +224,10 @@ namespace TrueCraft.Client
             _window.SwapBuffers();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        protected virtual void Initialize()
+        {
+        }
+
         ~Game()
         {
             Dispose(true);

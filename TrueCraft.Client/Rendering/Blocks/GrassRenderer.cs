@@ -1,10 +1,10 @@
 ﻿using System;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 using TrueCraft.Core.Logic.Blocks;
 using TrueCraft.API.Logic;
 using TrueCraft.Core.World;
 using TrueCraft.API;
+using TrueCraft.Client.Maths;
+using TrueCraft.Client.Graphics;
 
 namespace TrueCraft.Client.Rendering.Blocks
 {
@@ -92,8 +92,8 @@ namespace TrueCraft.Client.Rendering.Blocks
 
         public static readonly Color BiomeColor = new Color(105, 169, 63);
 
-        public override VertexPositionNormalColorTexture[] Render(BlockDescriptor descriptor, Microsoft.Xna.Framework.Vector3 offset,
-            Tuple<int, int> textureMap, int indiciesOffset, out int[] indicies)
+        public override Vertex[] Render(BlockDescriptor descriptor, TrueCraft.Client.Maths.Vector3 offset,
+            Tuple<int, int> textureMap, int indiciesOffset, out ushort[] indicies)
         {
             var texture = Texture;
             if (descriptor.Coordinates.Y < World.Height)

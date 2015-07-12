@@ -1,8 +1,8 @@
 ﻿using System;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 using TrueCraft.Core.Logic.Blocks;
 using TrueCraft.API.Logic;
+using TrueCraft.Client.Maths;
+using TrueCraft.Client.Graphics;
 
 namespace TrueCraft.Client.Rendering.Blocks
 {
@@ -50,8 +50,8 @@ namespace TrueCraft.Client.Rendering.Blocks
             TextureMap + new Vector2(2, 2),
         };
 
-        public override VertexPositionNormalColorTexture[] Render(BlockDescriptor descriptor, Vector3 offset,
-                                                             Tuple<int, int> textureMap, int indiciesOffset, out int[] indicies)
+        public override Vertex[] Render(BlockDescriptor descriptor, Vector3 offset,
+             Tuple<int, int> textureMap, int indiciesOffset, out ushort[] indicies)
         {
             var overhead = new Vector3(0.5f, 0.5f, 0.5f);
             var centerized = new Vector3(7f / 16f, 0, 7f / 16f);

@@ -6,12 +6,11 @@ using TrueCraft.Client.Rendering;
 using TrueCraft.Core.World;
 using TrueCraft.API;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using Vector2 = Microsoft.Xna.Framework.Vector2;
-using Vector3 = Microsoft.Xna.Framework.Vector3;
 using TrueCraft.API.Logic;
 using System.Threading.Tasks;
+using TrueCraft.Client.Graphics;
+using Vector2 = TrueCraft.Client.Maths.Vector2;
+using Vector3 = TrueCraft.Client.Maths.Vector3;
 
 namespace TrueCraft.Client.Rendering
 {
@@ -72,9 +71,9 @@ namespace TrueCraft.Client.Rendering
 
         private class RenderState
         {
-            public readonly List<VertexPositionNormalColorTexture> Verticies = new List<VertexPositionNormalColorTexture>();
-            public readonly List<int> OpaqueIndicies = new List<int>();
-            public readonly List<int> TransparentIndicies = new List<int>();
+            public readonly List<Vertex> Verticies = new List<Vertex>();
+            public readonly List<ushort> OpaqueIndicies = new List<ushort>();
+            public readonly List<ushort> TransparentIndicies = new List<ushort>();
             public readonly HashSet<Coordinates3D> DrawableCoordinates = new HashSet<Coordinates3D>();
         }
 
@@ -136,7 +135,7 @@ namespace TrueCraft.Client.Rendering
                 var provider = BlockRepository.GetBlockProvider(descriptor.ID);
                 if (provider.RenderOpaque)
                 {
-                    int[] i;
+                    ushort[] i;
                     var v = BlockRenderer.RenderBlock(provider, descriptor,
                         new Vector3(chunk.X * Chunk.Width + coords.X, coords.Y, chunk.Z * Chunk.Depth + coords.Z),
                         state.Verticies.Count, out i);
@@ -145,7 +144,7 @@ namespace TrueCraft.Client.Rendering
                 }
                 else
                 {
-                    int[] i;
+                    ushort[] i;
                     var v = BlockRenderer.RenderBlock(provider, descriptor,
                         new Vector3(chunk.X * Chunk.Width + coords.X, coords.Y, chunk.Z * Chunk.Depth + coords.Z),
                         state.Verticies.Count, out i);

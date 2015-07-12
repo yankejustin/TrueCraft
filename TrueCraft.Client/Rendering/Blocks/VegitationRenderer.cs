@@ -1,8 +1,8 @@
 ﻿using System;
 using TrueCraft.Core.Logic.Blocks;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using TrueCraft.API.Logic;
+using TrueCraft.Client.Maths;
+using TrueCraft.Client.Graphics;
 
 namespace TrueCraft.Client.Rendering.Blocks
 {
@@ -100,8 +100,8 @@ namespace TrueCraft.Client.Rendering.Blocks
             }
         }
 
-        public override VertexPositionNormalColorTexture[] Render(BlockDescriptor descriptor, Vector3 offset,
-            Tuple<int, int> textureMap, int indiciesOffset, out int[] indicies)
+        public override Vertex[] Render(BlockDescriptor descriptor, Vector3 offset,
+            Tuple<int, int> textureMap, int indiciesOffset, out ushort[] indicies)
         {
             if (descriptor.ID == RoseBlock.BlockID)
                 return RenderQuads(descriptor, offset, RoseTexture, indiciesOffset, out indicies, Color.White);

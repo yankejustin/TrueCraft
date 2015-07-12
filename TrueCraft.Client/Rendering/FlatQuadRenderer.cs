@@ -1,7 +1,7 @@
 ﻿using System;
 using TrueCraft.API.Logic;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+using TrueCraft.Client.Maths;
+using TrueCraft.Client.Graphics;
 
 namespace TrueCraft.Client.Rendering
 {
@@ -23,18 +23,18 @@ namespace TrueCraft.Client.Rendering
                 Texture[i] *= new Vector2(16f / 256f);
         }
 
-        public override VertexPositionNormalColorTexture[] Render(BlockDescriptor descriptor, Vector3 offset,
-            Tuple<int, int> textureMap, int indiciesOffset, out int[] indicies)
+        public override Vertex[] Render(BlockDescriptor descriptor, Vector3 offset,
+            Tuple<int, int> textureMap, int indiciesOffset, out ushort[] indicies)
         {
             return RenderQuads(descriptor, offset, Texture, indiciesOffset, out indicies, Color.White);
         }
 
-        protected VertexPositionNormalColorTexture[] RenderQuads(BlockDescriptor descriptor, Vector3 offset,
-            Vector2[] textureMap, int indiciesOffset, out int[] indicies, Color color)
+        protected Vertex[] RenderQuads(BlockDescriptor descriptor, Vector3 offset,
+            Vector2[] textureMap, int indiciesOffset, out ushort[] indicies, Color color)
         {
-            indicies = new int[6 * 4];
-            var verticies = new VertexPositionNormalColorTexture[4 * 4];
-            int[] _indicies;
+            indicies = new ushort[6 * 4];
+            var verticies = new Vertex[4 * 4];
+            ushort[] _indicies;
             int textureIndex = 0;
             for (int side = 0; side < 4; side++)
             {
@@ -46,18 +46,18 @@ namespace TrueCraft.Client.Rendering
             return verticies;
         }
 
-        protected static VertexPositionNormalColorTexture[] CreateAngledQuad(int face, Vector3 offset, Vector2[] texture, int textureOffset,
-            int indiciesOffset, out int[] indicies, Color color)
+        protected static Vertex[] CreateAngledQuad(int face, Vector3 offset, Vector2[] texture, int textureOffset,
+            int indiciesOffset, out ushort[] indicies, Color color)
         {
-            indicies = new[] { 0, 1, 3, 1, 2, 3 };
+            indicies = new ushort[] { 0, 1, 3, 1, 2, 3 };
             for (int i = 0; i < indicies.Length; i++)
-                indicies[i] += (face * 4) + indiciesOffset;
-            var quad = new VertexPositionNormalColorTexture[4];
+                indicies[i] += (ushort)((face * 4) + indiciesOffset);
+            var quad = new Vertex[4];
             var unit = QuadMesh[face];
             var normal = CubeNormals[face];
             for (int i = 0; i < 4; i++)
             {
-                quad[i] = new VertexPositionNormalColorTexture(offset + unit[i], normal, color, texture[textureOffset + i]);
+                quad[i] = new Vertex(offset + unit[i], normal, color, texture[textureOffset + i]);
             }
             return quad;
         }

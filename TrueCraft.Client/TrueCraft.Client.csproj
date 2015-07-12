@@ -4,8 +4,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A6516869-A2FB-4E31-85C8-2285490CB32C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>TrueCraft.Client</RootNamespace>
@@ -54,28 +52,13 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Input\KeyboardComponent.cs" />
-    <Compile Include="Input\KeyboardEventArgs.cs" />
-    <Compile Include="Input\KeyboardKeyEventArgs.cs" />
-    <Compile Include="Input\MouseButton.cs" />
-    <Compile Include="Input\MouseButtonEventArgs.cs" />
-    <Compile Include="Input\MouseComponent.cs" />
-    <Compile Include="Input\MouseEventArgs.cs" />
-    <Compile Include="Input\MouseMoveEventArgs.cs" />
-    <Compile Include="Input\MouseScrollEventArgs.cs" />
-    <Compile Include="Interface\DebugInterface.cs" />
-    <Compile Include="Interface\Control.cs" />
-    <Compile Include="Interface\InterfaceScale.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\Blocks\CobwebRenderer.cs" />
     <Compile Include="Rendering\Blocks\SlabRenderer.cs" />
-    <Compile Include="Rendering\Camera.cs" />
-    <Compile Include="Rendering\Font.cs" />
-    <Compile Include="Rendering\FontRenderer.cs" />
-    <Compile Include="Rendering\FontStyle.cs" />
     <Compile Include="Rendering\Renderer.cs" />
     <Compile Include="Rendering\RendererEventArgs.cs" />
     <Compile Include="Rendering\TextureMapper.cs" />
@@ -83,14 +66,10 @@
     <Compile Include="MultiplayerClient.cs" />
     <Compile Include="Handlers\PacketHandlers.cs" />
     <Compile Include="Events\ChatMessageEventArgs.cs" />
-    <Compile Include="Interface\ChatInterface.cs" />
-    <Compile Include="Interface\IGameInterface.cs" />
-    <Compile Include="BMFont.cs" />
     <Compile Include="Handlers\ChunkHandler.cs" />
     <Compile Include="ReadOnlyWorld.cs" />
     <Compile Include="Events\ChunkEventArgs.cs" />
     <Compile Include="PhysicsEngine.cs" />
-    <Compile Include="Rendering\Mesh.cs" />
     <Compile Include="Rendering\BlockRenderer.cs" />
     <Compile Include="Rendering\ChunkMesh.cs" />
     <Compile Include="Rendering\Blocks\GrassRenderer.cs" />
@@ -105,7 +84,6 @@
     <Compile Include="Rendering\Blocks\LadderRenderer.cs" />
     <Compile Include="Rendering\Blocks\SugarcaneRenderer.cs" />
     <Compile Include="Rendering\Blocks\VegitationRenderer.cs" />
-    <Compile Include="Rendering\VertexPositionNormalColorTexture.cs" />
     <Compile Include="Rendering\Blocks\WheatRenderer.cs" />
     <Compile Include="Rendering\Blocks\WaterRenderer.cs" />
     <Compile Include="Rendering\Blocks\FarmlandRenderer.cs" />
@@ -123,6 +101,10 @@
     <ProjectReference Include="..\TrueCraft.Core\TrueCraft.Core.csproj">
       <Project>{FA4BE9A3-DBF0-4380-BA2B-FFAA71C4706D}</Project>
       <Name>TrueCraft.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TrueCraft.Client.Runtime\TrueCraft.Client.Runtime.csproj">
+      <Project>{C8D2F537-C3FB-4850-B462-A62DFC2A507E}</Project>
+      <Name>TrueCraft.Client.Runtime</Name>
     </ProjectReference>
   </ItemGroup>
   <ProjectExtensions>
@@ -179,13 +161,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Content\Fonts\Pixel_Regular.fnt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="OpenTK.dll.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="packages.config" />
-    <None Include="Tao.Sdl.dll.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="Content\Fonts\DejaVu_Bold_0.png">

@@ -1,24 +1,24 @@
 ﻿using System;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 using TrueCraft.Core.Logic;
 using TrueCraft.API.Logic;
 using System.Linq;
+using TrueCraft.Client.Graphics;
+using TrueCraft.Client.Maths;
 
 namespace TrueCraft.Client.Rendering
 {
     public class BlockRenderer
     {
-        private static BlockRenderer DefaultRenderer = new BlockRenderer();
-        private static BlockRenderer[] Renderers = new BlockRenderer[0x100];
+        private static readonly BlockRenderer DefaultRenderer = new BlockRenderer();
+        private static readonly BlockRenderer[] Renderers = new BlockRenderer[0x100];
 
         public static void RegisterRenderer(byte id, BlockRenderer renderer)
         {
             Renderers[id] = renderer;
         }
 
-        public static VertexPositionNormalColorTexture[] RenderBlock(IBlockProvider provider, BlockDescriptor descriptor,
-            Vector3 offset, int indiciesOffset, out int[] indicies)
+        public static Vertex[] RenderBlock(IBlockProvider provider, BlockDescriptor descriptor,
+            Vector3 offset, int indiciesOffset, out ushort[] indicies)
         {
             var textureMap = provider.GetTextureMap(descriptor.Metadata);
             if (textureMap == null)
@@ -26,8 +26,8 @@ namespace TrueCraft.Client.Rendering
             return Renderers[descriptor.ID].Render(descriptor, offset, textureMap, indiciesOffset, out indicies);
         }
 
-        public virtual VertexPositionNormalColorTexture[] Render(BlockDescriptor descriptor, Vector3 offset,
-            Tuple<int, int> textureMap, int indiciesOffset, out int[] indicies)
+        public virtual Vertex[] Render(BlockDescriptor descriptor, Vector3 offset,
+            Tuple<int, int> textureMap, int indiciesOffset, out ushort[] indicies)
         {
             var texCoords = new Vector2(textureMap.Item1, textureMap.Item2);
             var texture = new[]
@@ -42,11 +42,11 @@ namespace TrueCraft.Client.Rendering
             return CreateUniformCube(offset, texture, indiciesOffset, out indicies, Color.White);
         }
 
-        protected VertexPositionNormalColorTexture[] CreateUniformCube(Vector3 offset, Vector2[] texture, int indiciesOffset, out int[] indicies, Color color)
+        protected Vertex[] CreateUniformCube(Vector3 offset, Vector2[] texture, int indiciesOffset, out ushort[] indicies, Color color)
         {
-            indicies = new int[6 * 6];
-            var verticies = new VertexPositionNormalColorTexture[4 * 6];
-            int[] _indicies;
+            indicies = new ushort[6 * 6];
+            var verticies = new Vertex[4 * 6];
+            ushort[] _indicies;
             int textureIndex = 0;
             for (int _side = 0; _side < 6; _side++)
             {
@@ -59,18 +59,18 @@ namespace TrueCraft.Client.Rendering
             return verticies;
         }
 
-        protected static VertexPositionNormalColorTexture[] CreateQuad(CubeFace face, Vector3 offset, Vector2[] texture, int textureOffset,
-            int indiciesOffset, out int[] indicies, Color color)
+        protected static Vertex[] CreateQuad(CubeFace face, Vector3 offset, Vector2[] texture, int textureOffset,
+            int indiciesOffset, out ushort[] indicies, Color color)
         {
-            indicies = new[] { 0, 1, 3, 1, 2, 3 };
+            indicies = new ushort[] { 0, 1, 3, 1, 2, 3 };
             for (int i = 0; i < indicies.Length; i++)
-                indicies[i] += ((int)face * 4) + indiciesOffset;
-            var quad = new VertexPositionNormalColorTexture[4];
+                indicies[i] += (ushort)(((int)face * 4) + indiciesOffset);
+            var quad = new Vertex[4];
             var unit = CubeMesh[(int)face];
             var normal = CubeNormals[(int)face];
             for (int i = 0; i < 4; i++)
             {
-                quad[i] = new VertexPositionNormalColorTexture(offset + unit[i], normal, color, texture[textureOffset + i]);
+                quad[i] = new Vertex(offset + unit[i], normal, color, texture[textureOffset + i]);
             }
             return quad;
         }

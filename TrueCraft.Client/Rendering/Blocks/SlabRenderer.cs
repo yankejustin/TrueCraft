@@ -1,8 +1,8 @@
 ﻿using System;
 using TrueCraft.Core.Logic.Blocks;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using TrueCraft.API.Logic;
+using TrueCraft.Client.Maths;
+using TrueCraft.Client.Graphics;
 
 namespace TrueCraft.Client.Rendering.Blocks
 {
@@ -188,7 +188,7 @@ namespace TrueCraft.Client.Rendering.Blocks
             }
         }
 
-        public override VertexPositionNormalColorTexture[] Render(BlockDescriptor descriptor, Vector3 offset, Tuple<int, int> textureMap, int indiciesOffset, out int[] indicies)
+        public override Vertex[] Render(BlockDescriptor descriptor, Vector3 offset, Tuple<int, int> textureMap, int indiciesOffset, out ushort[] indicies)
         {
             if (descriptor.ID == SlabBlock.BlockID)
                 return RenderSlab(descriptor, offset, textureMap, indiciesOffset, out indicies);
@@ -196,7 +196,7 @@ namespace TrueCraft.Client.Rendering.Blocks
                 return RenderDoubleSlab(descriptor, offset, textureMap, indiciesOffset, out indicies);
         }
 
-        protected virtual VertexPositionNormalColorTexture[] RenderSlab(BlockDescriptor descriptor, Vector3 offset, Tuple<int, int> textureMap, int indiciesOffset, out int[] indicies)
+        protected virtual Vertex[] RenderSlab(BlockDescriptor descriptor, Vector3 offset, Tuple<int, int> textureMap, int indiciesOffset, out ushort[] indicies)
         {
             var result = CreateUniformCube(offset, GetTextureMap((SlabBlock.SlabMaterial)descriptor.Metadata), indiciesOffset, out indicies, Color.White);
             for (int i = 0; i < 6; i++)
@@ -209,7 +209,7 @@ namespace TrueCraft.Client.Rendering.Blocks
                     case CubeFace.PositiveX:
                     case CubeFace.NegativeX:
                         for (int j = 0; j < 2; j++)
-                            result[(i * 4) + j].Texture.Y -= (1f / 32f);
+                            result[(i * 4) + j].TexCoord.Y -= (1f / 32f);
                         for (int k = 2; k < 4; k++)
                         {
                             result[(i * 4) + k].Position.Y -= 0.5f;
@@ -227,7 +227,7 @@ namespace TrueCraft.Client.Rendering.Blocks
             return result;
         }
 
-        protected virtual VertexPositionNormalColorTexture[] RenderDoubleSlab(BlockDescriptor descriptor, Vector3 offset, Tuple<int, int> textureMap, int indiciesOffset, out int[] indicies)
+        protected virtual Vertex[] RenderDoubleSlab(BlockDescriptor descriptor, Vector3 offset, Tuple<int, int> textureMap, int indiciesOffset, out ushort[] indicies)
         {
             return CreateUniformCube(offset, GetTextureMap((SlabBlock.SlabMaterial)descriptor.Metadata), indiciesOffset, out indicies, Color.White);
         }

@@ -12,23 +12,14 @@ using TrueCraft.Client.Graphics.OpenGL;
 
 namespace TrueCraft.Client.Graphics
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class Mesh : IDisposable
+    public class Mesh : IDisposable
     {
-        /// <summary>
-        /// 
-        /// </summary>
         public const int SubmeshLimit = 16;
 
         private VertexBuffer _vertices;
         private IndexBuffer[] _indices;
         private bool _isDynamic, _isDisposed;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsDynamic
         {
             get
@@ -51,9 +42,6 @@ namespace TrueCraft.Client.Graphics
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public Vertex[] Vertices
         {
             set
@@ -69,19 +57,11 @@ namespace TrueCraft.Client.Graphics
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsDisposed
         {
             get { return _isDisposed; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="submeshes"></param>
-        /// <param name="isDynamic"></param>
         public Mesh(int submeshes = 1, bool isDynamic = false)
         {
             if ((submeshes < 0) || (submeshes >= Mesh.SubmeshLimit))
@@ -95,12 +75,6 @@ namespace TrueCraft.Client.Graphics
             _isDisposed = false;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="vertices"></param>
-        /// <param name="indices"></param>
-        /// <param name="isDynamic"></param>
         public Mesh(Vertex[] vertices, ushort[] indices, bool isDynamic = false)
             : this(1, isDynamic)
         {
@@ -108,11 +82,6 @@ namespace TrueCraft.Client.Graphics
             SetSubmesh(0, indices);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="indices"></param>
         public void SetSubmesh(int index, ushort[] indices)
         {
             if (_isDisposed)
@@ -125,9 +94,6 @@ namespace TrueCraft.Client.Graphics
             _indices[index].SetData(indices);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void Draw()
         {
             if (_isDisposed)
@@ -138,10 +104,6 @@ namespace TrueCraft.Client.Graphics
                 Draw(i);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
         public void Draw(int index)
         {
             if (_isDisposed)
@@ -172,9 +134,6 @@ namespace TrueCraft.Client.Graphics
             OpenGLException.CheckErrors();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void Dispose()
         {
             if (_isDisposed)

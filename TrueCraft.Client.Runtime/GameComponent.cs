@@ -39,9 +39,6 @@ namespace TrueCraft.Client
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsEnabled
         {
             get

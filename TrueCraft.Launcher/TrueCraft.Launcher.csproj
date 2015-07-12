@@ -3,8 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{6604F17A-552E-405D-B327-37C8B1648C86}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>TrueCraft.Launcher</RootNamespace>
@@ -105,12 +103,4 @@
     <EmbeddedResource Include="Content\truecraft-logo.png" />
     <EmbeddedResource Include="Content\default-server-icon.png" />
   </ItemGroup>
-  <PropertyGroup Condition=" '$(OS)' == 'UNIX' ">
-    <PostBuildEvent>rm $(TargetDir)/MonoGame.Framework.dll &amp;&amp; cp $(SolutionDir)/packages/MonoGame.Framework.Linux.3.4.0.459/lib/net40/MonoGame.Framework.dll $(TargetDir)/MonoGame.Framework.Linux.dll &amp;&amp; cp $(SolutionDir)/packages/MonoGame.Framework.WindowsGL.3.4.0.459/lib/net40/MonoGame.Framework.dll $(TargetDir)/MonoGame.Framework.Windows.dll</PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
-    <PostBuildEvent>del $(TargetDir)MonoGame.Framework.dll
-copy $(SolutionDir)packages\MonoGame.Framework.Linux.3.4.0.459\lib\net40\MonoGame.Framework.dll $(TargetDir)MonoGame.Framework.Linux.dll
-copy $(SolutionDir)packages\MonoGame.Framework.WindowsGL.3.4.0.459\lib\net40\MonoGame.Framework.dll $(TargetDir)MonoGame.Framework.Windows.dll</PostBuildEvent>
-  </PropertyGroup>
 </Project>

@@ -7,8 +7,6 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>TrueCraft</RootNamespace>
     <AssemblyName>TrueCraft</AssemblyName>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <Optimize>false</Optimize>

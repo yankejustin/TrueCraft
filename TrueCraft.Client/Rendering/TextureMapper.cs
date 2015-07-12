@@ -2,11 +2,9 @@
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using TrueCraft.Core;
 using Ionic.Zip;
-using MonoGame.Utilities.Png;
+using TrueCraft.Client.Graphics.OpenGL;
 
 namespace TrueCraft.Client.Rendering
 {
@@ -25,48 +23,24 @@ namespace TrueCraft.Client.Rendering
         /// 
         /// </summary>
         /// <param name="graphicsDevice"></param>
-        public static void LoadDefaults(GraphicsDevice graphicsDevice)
+        public static void LoadDefaults()
         {
             Defaults.Clear();
 
-            Defaults.Add("items.png", new PngReader().Read(File.OpenRead("Content/items.png"), graphicsDevice));
-            Defaults.Add("terrain.png", new PngReader().Read(File.OpenRead("Content/terrain.png"), graphicsDevice));
+            Defaults.Add("items.png", Texture2D.FromStream(File.OpenRead("Content/items.png")));
+            Defaults.Add("terrain.png", Texture2D.FromStream(File.OpenRead("Content/terrain.png")));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private GraphicsDevice Device { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         private IDictionary<string, Texture2D> Customs { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsDisposed { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="graphicsDevice"></param>
-        public TextureMapper(GraphicsDevice graphicsDevice)
+        public TextureMapper()
         {
-            if (graphicsDevice == null)
-                throw new ArgumentException();
-
-            Device = graphicsDevice;
             Customs = new Dictionary<string, Texture2D>();
             IsDisposed = false;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="texture"></param>
         public void AddTexture(string key, Texture2D texture)
         {
             if (string.IsNullOrEmpty(key) || (texture == null))
@@ -104,7 +78,7 @@ namespace TrueCraft.Client.Rendering
                                 var ms = new MemoryStream();
                                 CopyStream(stream, ms);
                                 ms.Seek(0, SeekOrigin.Begin);
-                                AddTexture(key, new PngReader().Read(ms, Device));
+                                AddTexture(key, Texture2D.FromStream(ms));
                                 ms.Dispose();
                             }
                             catch (Exception ex) { Console.WriteLine("Exception occured while loading {0} from texture pack:\n\n{1}", key, ex); }
@@ -186,7 +160,6 @@ namespace TrueCraft.Client.Rendering
 
             Customs.Clear();
             Customs = null;
-            Device = null;
             IsDisposed = true;
         }
     }

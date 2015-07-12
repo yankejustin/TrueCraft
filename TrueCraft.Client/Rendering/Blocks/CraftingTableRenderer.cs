@@ -1,8 +1,8 @@
 ﻿using System;
 using TrueCraft.Core.Logic.Blocks;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using TrueCraft.API.Logic;
+using TrueCraft.Client.Graphics;
+using TrueCraft.Client.Maths;
 
 namespace TrueCraft.Client.Rendering.Blocks
 {
@@ -53,8 +53,8 @@ namespace TrueCraft.Client.Rendering.Blocks
             BottomTexture + Vector2.UnitX,
         };
 
-        public override VertexPositionNormalColorTexture[] Render(BlockDescriptor descriptor, Vector3 offset,
-            Tuple<int, int> textureMap, int indiciesOffset, out int[] indicies)
+        public override Vertex[] Render(BlockDescriptor descriptor, Vector3 offset,
+            Tuple<int, int> textureMap, int indiciesOffset, out ushort[] indicies)
         {
             return CreateUniformCube(offset, Texture, indiciesOffset, out indicies, Color.White);
         }
