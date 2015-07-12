@@ -125,8 +125,6 @@ namespace TrueCraft.Client
             {
                 try
                 {
-                    Initialize();
-
                     _isRunning = true;
                     _arguments = args;
 
@@ -223,10 +221,6 @@ namespace TrueCraft.Client
                 Render(this, args);
 
             _window.SwapBuffers();
-        }
-
-        protected virtual void Initialize()
-        {
         }
 
         ~Game()

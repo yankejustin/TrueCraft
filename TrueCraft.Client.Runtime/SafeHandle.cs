@@ -83,8 +83,9 @@ namespace TrueCraft.Client
                 _handle = IntPtr.Zero;
                 _isDisposed = true;
             }
-            else
-                throw new NotSupportedException();
+            // TODO: Enforce this after initial port.
+            // else
+            //     throw new NotSupportedException();
         }
 
         /// <summary>

@@ -47,8 +47,8 @@ namespace TrueCraft.Client
 
             var user = new TrueCraftUser { Username = args[1] };
             var client = new MultiplayerClient(user);
-            var game = new TrueCraftGame(client, ParseEndPoint(args[0]));
-            game.Run();
+            using (var game = new TrueCraftGame(client, ParseEndPoint(args[0])))
+                game.Run(args);
             client.Disconnect();
         }
 

@@ -40,7 +40,16 @@ namespace TrueCraft.Client
             PendingMainThreadActions = new ConcurrentBag<Action>();
         }
 
-        protected override void Initialize()
+        protected override void OnLoad(object sender, EventArgs e)
+        {
+            // Initializes various runtime components.
+            base.OnLoad(sender, e);
+
+            Initialize();
+            LoadContent();
+        }
+
+        private void Initialize()
         {
             ChunkConverter = new ChunkRenderer(this, Client.World.World.BlockRepository);
             Client.ChunkLoaded += (sender, e) => ChunkConverter.Enqueue(e.Chunk);
@@ -71,7 +80,7 @@ namespace TrueCraft.Client
             }
         }
 
-        protected void LoadContent()
+        private void LoadContent()
         {
             // Ensure we have default textures loaded.
             TextureMapper.LoadDefaults();
@@ -86,9 +95,8 @@ namespace TrueCraft.Client
         {
             Mesh mesh;
             while (IncomingChunks.TryTake(out mesh))
-            {
                 ChunkMeshes.Add(mesh);
-            }
+
             Action action;
             if (PendingMainThreadActions.TryTake(out action))
                 action();
@@ -117,17 +125,12 @@ namespace TrueCraft.Client
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
         }
 
-        protected override void Dispose(bool disposing)
+        protected override void OnUnload(object sender, EventArgs e)
         {
-            if (disposing)
-            {
-                ChunkConverter.Dispose();
+            ChunkConverter.Dispose();
 
-                KeyboardComponent.Dispose();
-                MouseComponent.Dispose();
-            }
-
-            base.Dispose(disposing);
+            // Cleans up various runtime components (and should be run last).
+            base.OnUnload(sender, e);
         }
     }
 }
