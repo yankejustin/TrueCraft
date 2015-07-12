@@ -73,7 +73,6 @@ namespace TrueCraft.Client
 
         protected void LoadContent()
         {
-            /*
             // Ensure we have default textures loaded.
             TextureMapper.LoadDefaults();
 
@@ -81,7 +80,6 @@ namespace TrueCraft.Client
             TextureMapper = new TextureMapper();
             if (UserSettings.Local.SelectedTexturePack != TexturePack.Default.Name)
                 TextureMapper.AddTexturePack(TexturePack.FromArchive(Path.Combine(TexturePack.TexturePackPath, UserSettings.Local.SelectedTexturePack)));
-            */
         }
 
         protected override void OnUpdate(object sender, FrameEventArgs e)

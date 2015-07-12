@@ -7,6 +7,7 @@ using TrueCraft;
 using TrueCraft.Client;
 using TrueCraft.Client.Input;
 using TrueCraft.Client.Graphics;
+using OpenTK.Graphics.OpenGL;
 
 namespace TrueCraft.Client
 {

@@ -27,6 +27,8 @@ namespace TrueCraft.Client.Graphics.OpenGL
         /// <param name="unit"></param>
         protected static void SwitchUnit(int unit)
         {
+            if (unit == -1)
+                return;
             if ((unit < 0) || (unit >= Texture.Units))
                 throw new ArgumentException();
 
@@ -52,23 +54,18 @@ namespace TrueCraft.Client.Graphics.OpenGL
 
         private int _unit;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsBound
         {
             get
             {
                 if (IsDisposed)
                     throw new ObjectDisposedException(GetType().Name);
-
+                if (this._unit == -1)
+                    return false;
                 return (_bound[this._unit] == this);
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public int Unit
         {
             get
@@ -80,17 +77,11 @@ namespace TrueCraft.Client.Graphics.OpenGL
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected abstract TextureTarget Target
         {
             get;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public Texture()
             : base()
         {
@@ -100,10 +91,6 @@ namespace TrueCraft.Client.Graphics.OpenGL
             this._unit = -1;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="unit"></param>
         public void Bind(int unit = 0)
         {
             if (IsDisposed)

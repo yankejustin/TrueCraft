@@ -29,8 +29,10 @@ namespace TrueCraft.Client.Graphics.OpenGL
                 throw new ArgumentException();
 
             var texture = new Texture2D();
+            texture.Bind(); // ?
             using (var image = Image.FromStream(stream))
                 texture.SetBitmap((Bitmap)image);
+            texture.Unbind();
             return texture;
         }
 
