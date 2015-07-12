@@ -55,7 +55,7 @@ namespace TrueCraft.Client
             Client.ChunkLoaded += (sender, e) => ChunkConverter.Enqueue(e.Chunk);
             //Client.ChunkModified += (sender, e) => ChunkConverter.Enqueue(e.Chunk, true);
             ChunkConverter.MeshCompleted += ChunkConverter_MeshGenerated;
-            //ChunkConverter.Start();
+            ChunkConverter.Start();
             Client.PropertyChanged += HandleClientPropertyChanged;
             Client.Connect(EndPoint);
             LoadContent();
@@ -64,7 +64,10 @@ namespace TrueCraft.Client
 
         void ChunkConverter_MeshGenerated(object sender, RendererEventArgs<ReadOnlyChunk> e)
         {
-            IncomingChunks.Add(e.Result);
+            PendingMainThreadActions.Add(() =>
+            {
+                IncomingChunks.Add(e.Result);
+            });
         }
 
         void HandleClientPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -123,6 +126,9 @@ namespace TrueCraft.Client
         protected override void OnRender(object sender, FrameEventArgs e)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            foreach (var chunk in ChunkMeshes)
+                chunk.Draw();
         }
 
         protected override void OnUnload(object sender, EventArgs e)

@@ -58,15 +58,18 @@ namespace TrueCraft.Client.Rendering
             Coordinates3D.West
         };
 
-        protected override bool TryRender(ReadOnlyChunk item, out Mesh result)
+        protected override bool TryRender(ReadOnlyChunk item, out Func<Mesh> meshFactory)
         {
             var state = new RenderState();
             ProcessChunk(item, state);
 
-            result = new ChunkMesh(item, Game, state.Verticies.ToArray(),
-                state.OpaqueIndicies.ToArray(), state.TransparentIndicies.ToArray());
+            meshFactory = () =>
+            {
+                return new ChunkMesh(item, Game, state.Verticies.ToArray(),
+                    state.OpaqueIndicies.ToArray(), state.TransparentIndicies.ToArray());
+            };
 
-            return (result != null);
+            return (meshFactory != null);
         }
 
         private class RenderState

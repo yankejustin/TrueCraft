@@ -9,6 +9,9 @@ namespace TrueCraft.Client.Rendering
     /// <typeparam name="T"></typeparam>
     public sealed class RendererEventArgs<T> : EventArgs
     {
+        private Mesh _mesh;
+        private Func<Mesh> _meshFactory;
+
         /// <summary>
         /// 
         /// </summary>
@@ -17,7 +20,16 @@ namespace TrueCraft.Client.Rendering
         /// <summary>
         /// 
         /// </summary>
-        public Mesh Result { get; private set; }
+        public Mesh Result
+        {
+            get
+            {
+                if (this._mesh == null)
+                    this._mesh = this._meshFactory.Invoke();
+
+                return this._mesh;
+            }
+        }
 
         /// <summary>
         /// 
@@ -28,12 +40,14 @@ namespace TrueCraft.Client.Rendering
         /// 
         /// </summary>
         /// <param name="item"></param>
-        /// <param name="result"></param>
+        /// <param name="meshFactory"></param>
         /// <param name="isPriority"></param>
-        public RendererEventArgs(T item, Mesh result, bool isPriority)
+        public RendererEventArgs(T item, Func<Mesh> meshFactory, bool isPriority)
         {
+            this._mesh = null;
+            this._meshFactory = meshFactory;
+
             Item = item;
-            Result = result;
             IsPriority = isPriority;
         }
     }
