@@ -130,9 +130,9 @@ namespace TrueCraft.Client.Graphics
             if (_isDirty)
                 Recalculate();
 
-            program.GetUniform<Matrix>("world").SetValue(Matrix.Identity);
-            program.GetUniform<Matrix>("view").SetValue(_view);
-            program.GetUniform<Matrix>("projection").SetValue(_projection);
+            program.GetUniform<Matrix>("un_Model").SetValue(Matrix.Identity);
+            program.GetUniform<Matrix>("un_View").SetValue(_view);
+            program.GetUniform<Matrix>("un_Projection").SetValue(_projection);
         }
 
         /// <summary>

@@ -107,7 +107,7 @@ namespace TrueCraft.Client
             _window = new GameWindow(
                 width, height, GraphicsMode.Default, title,
                 (isFullscreen) ? GameWindowFlags.Fullscreen : GameWindowFlags.FixedWindow,
-                DisplayDevice.Default, 3, 2, GraphicsContextFlags.Default);
+                DisplayDevice.Default, 3, 3, GraphicsContextFlags.Default);
             _isDisposed = false;
 
             _window.Load += OnLoad;

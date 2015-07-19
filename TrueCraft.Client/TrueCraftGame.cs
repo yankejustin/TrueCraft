@@ -12,8 +12,10 @@ using System.Collections.Concurrent;
 using TrueCraft.Client.Input;
 using TrueCraft.Core;
 using TrueCraft.Client.Graphics;
-using OpenTK.Graphics.OpenGL;
+using TrueCraft.Client.Graphics.OpenGL;
+using TKOpenGL = OpenTK.Graphics.OpenGL;
 using TrueCraft.Client.Events;
+using TrueCraft.Client.Maths;
 
 namespace TrueCraft.Client
 {
@@ -27,6 +29,9 @@ namespace TrueCraft.Client
         public ConcurrentBag<Action> PendingMainThreadActions { get; set; }
         private ConcurrentBag<Mesh> IncomingChunks { get; set; }
         private TextureMapper TextureMapper { get; set; }
+        private Camera Camera { get; set; }
+        private Maths.BoundingFrustum CameraFrustum { get; set; }
+        private ShaderProgram BasicEffect { get; set; }
 
         public TrueCraftGame(MultiplayerClient client, IPEndPoint endPoint)
             : base(UserSettings.Local.WindowResolution.Width,
@@ -39,6 +44,22 @@ namespace TrueCraft.Client
             ChunkMeshes = new List<Mesh>();
             IncomingChunks = new ConcurrentBag<Mesh>();
             PendingMainThreadActions = new ConcurrentBag<Action>();
+            Camera = new Camera(Window.Width / Window.Height, 70.0f, 0.25f, 1000.0f);
+            // UpdateCamera();
+        }
+
+        private void UpdateCamera()
+        {
+            Camera.Position = new Maths.Vector3(
+                (float)Client.Position.X,
+                (float)(Client.Position.Y + (Client.Size.Height / 2)),
+                (float)Client.Position.Z);
+
+            Camera.Pitch = Client.Pitch;
+            Camera.Yaw = Client.Yaw;
+
+            CameraFrustum = Camera.GetFrustum();
+            Camera.ApplyTo(BasicEffect);
         }
 
         protected override void OnLoad(object sender, EventArgs e)
@@ -47,7 +68,23 @@ namespace TrueCraft.Client
             base.OnLoad(sender, e);
 
             Initialize();
+            CreateShaders();
             LoadContent();
+        }
+
+        private void CreateShaders()
+        {
+            var vertex =
+                Shader.FromFile(ShaderType.Vertex, "Content/Shaders/vertex.glsl");
+            vertex.Compile();
+
+            var fragment =
+                Shader.FromFile(ShaderType.Fragment, "Content/Shaders/fragment.glsl");
+            fragment.Compile();
+
+            var basicEffect = new ShaderProgram(vertex, fragment);
+            basicEffect.Link();
+            BasicEffect = basicEffect;
         }
 
         private void Initialize()
@@ -60,7 +97,7 @@ namespace TrueCraft.Client
             Client.PropertyChanged += HandleClientPropertyChanged;
             Client.Connect(EndPoint);
             LoadContent();
-            GL.ClearColor(System.Drawing.Color.CornflowerBlue);
+            TKOpenGL.GL.ClearColor(System.Drawing.Color.CornflowerBlue);
         }
 
         void Client_ChunkLoaded(object sender, ChunkEventArgs e)
@@ -81,7 +118,6 @@ namespace TrueCraft.Client
             switch (e.PropertyName)
             {
                 case "Position":
-                    //UpdateCamera();
                     var sorter = new ChunkRenderer.ChunkSorter(new Coordinates3D(
                         (int)Client.Position.X, 0, (int)Client.Position.Z));
                     PendingMainThreadActions.Add(() => ChunkMeshes.Sort(sorter));
@@ -131,10 +167,17 @@ namespace TrueCraft.Client
 
         protected override void OnRender(object sender, FrameEventArgs e)
         {
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            TKOpenGL.GL.Clear(
+                TKOpenGL.ClearBufferMask.ColorBufferBit |
+                TKOpenGL.ClearBufferMask.DepthBufferBit);
 
+            // Make our basic shader program current and update our camera.
+            BasicEffect.MakeCurrent();
+            UpdateCamera();
+
+            // Draw the opaque portion of the chunk meshes.
             foreach (var chunk in ChunkMeshes)
-                chunk.Draw();
+                chunk.Draw(0);
         }
 
         protected override void OnUnload(object sender, EventArgs e)
