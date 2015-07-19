@@ -64,7 +64,7 @@ namespace TrueCraft.Client.Rendering
         {
             indicies = new uint[] { 0, 1, 3, 1, 2, 3 };
             for (int i = 0; i < indicies.Length; i++)
-                indicies[i] += (((int)face * 4) + indiciesOffset);
+                indicies[i] += (uint)(((int)face * 4) + indiciesOffset);
             var quad = new Vertex[4];
             var unit = CubeMesh[(int)face];
             var normal = CubeNormals[(int)face];
