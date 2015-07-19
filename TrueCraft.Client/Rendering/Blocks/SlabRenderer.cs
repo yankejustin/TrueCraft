@@ -188,7 +188,7 @@ namespace TrueCraft.Client.Rendering.Blocks
             }
         }
 
-        public override Vertex[] Render(BlockDescriptor descriptor, Vector3 offset, Tuple<int, int> textureMap, int indiciesOffset, out ushort[] indicies)
+        public override Vertex[] Render(BlockDescriptor descriptor, Vector3 offset, Tuple<int, int> textureMap, int indiciesOffset, out uint[] indicies)
         {
             if (descriptor.ID == SlabBlock.BlockID)
                 return RenderSlab(descriptor, offset, textureMap, indiciesOffset, out indicies);
@@ -196,7 +196,7 @@ namespace TrueCraft.Client.Rendering.Blocks
                 return RenderDoubleSlab(descriptor, offset, textureMap, indiciesOffset, out indicies);
         }
 
-        protected virtual Vertex[] RenderSlab(BlockDescriptor descriptor, Vector3 offset, Tuple<int, int> textureMap, int indiciesOffset, out ushort[] indicies)
+        protected virtual Vertex[] RenderSlab(BlockDescriptor descriptor, Vector3 offset, Tuple<int, int> textureMap, int indiciesOffset, out uint[] indicies)
         {
             var result = CreateUniformCube(offset, GetTextureMap((SlabBlock.SlabMaterial)descriptor.Metadata), indiciesOffset, out indicies, Color.White);
             for (int i = 0; i < 6; i++)
@@ -227,7 +227,7 @@ namespace TrueCraft.Client.Rendering.Blocks
             return result;
         }
 
-        protected virtual Vertex[] RenderDoubleSlab(BlockDescriptor descriptor, Vector3 offset, Tuple<int, int> textureMap, int indiciesOffset, out ushort[] indicies)
+        protected virtual Vertex[] RenderDoubleSlab(BlockDescriptor descriptor, Vector3 offset, Tuple<int, int> textureMap, int indiciesOffset, out uint[] indicies)
         {
             return CreateUniformCube(offset, GetTextureMap((SlabBlock.SlabMaterial)descriptor.Metadata), indiciesOffset, out indicies, Color.White);
         }

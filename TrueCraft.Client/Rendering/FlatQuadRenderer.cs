@@ -24,17 +24,17 @@ namespace TrueCraft.Client.Rendering
         }
 
         public override Vertex[] Render(BlockDescriptor descriptor, Vector3 offset,
-            Tuple<int, int> textureMap, int indiciesOffset, out ushort[] indicies)
+            Tuple<int, int> textureMap, int indiciesOffset, out uint[] indicies)
         {
             return RenderQuads(descriptor, offset, Texture, indiciesOffset, out indicies, Color.White);
         }
 
         protected Vertex[] RenderQuads(BlockDescriptor descriptor, Vector3 offset,
-            Vector2[] textureMap, int indiciesOffset, out ushort[] indicies, Color color)
+            Vector2[] textureMap, int indiciesOffset, out uint[] indicies, Color color)
         {
-            indicies = new ushort[6 * 4];
+            indicies = new uint[6 * 4];
             var verticies = new Vertex[4 * 4];
-            ushort[] _indicies;
+            uint[] _indicies;
             int textureIndex = 0;
             for (int side = 0; side < 4; side++)
             {
@@ -47,9 +47,9 @@ namespace TrueCraft.Client.Rendering
         }
 
         protected static Vertex[] CreateAngledQuad(int face, Vector3 offset, Vector2[] texture, int textureOffset,
-            int indiciesOffset, out ushort[] indicies, Color color)
+            int indiciesOffset, out uint[] indicies, Color color)
         {
-            indicies = new ushort[] { 0, 1, 3, 1, 2, 3 };
+            indicies = new uint[] { 0, 1, 3, 1, 2, 3 };
             for (int i = 0; i < indicies.Length; i++)
                 indicies[i] += (ushort)((face * 4) + indiciesOffset);
             var quad = new Vertex[4];

@@ -54,7 +54,7 @@ namespace TrueCraft.Client.Rendering.Blocks
         };
 
         public override Vertex[] Render(BlockDescriptor descriptor, Vector3 offset,
-            Tuple<int, int> textureMap, int indiciesOffset, out ushort[] indicies)
+            Tuple<int, int> textureMap, int indiciesOffset, out uint[] indicies)
         {
             return CreateUniformCube(offset, Texture, indiciesOffset, out indicies, Color.White);
         }

@@ -18,7 +18,7 @@ namespace TrueCraft.Client.Rendering
         }
 
         public static Vertex[] RenderBlock(IBlockProvider provider, BlockDescriptor descriptor,
-            Vector3 offset, int indiciesOffset, out ushort[] indicies)
+            Vector3 offset, int indiciesOffset, out uint[] indicies)
         {
             var textureMap = provider.GetTextureMap(descriptor.Metadata);
             if (textureMap == null)
@@ -27,7 +27,7 @@ namespace TrueCraft.Client.Rendering
         }
 
         public virtual Vertex[] Render(BlockDescriptor descriptor, Vector3 offset,
-            Tuple<int, int> textureMap, int indiciesOffset, out ushort[] indicies)
+            Tuple<int, int> textureMap, int indiciesOffset, out uint[] indicies)
         {
             var texCoords = new Vector2(textureMap.Item1, textureMap.Item2);
             var texture = new[]
@@ -42,11 +42,11 @@ namespace TrueCraft.Client.Rendering
             return CreateUniformCube(offset, texture, indiciesOffset, out indicies, Color.White);
         }
 
-        protected Vertex[] CreateUniformCube(Vector3 offset, Vector2[] texture, int indiciesOffset, out ushort[] indicies, Color color)
+        protected Vertex[] CreateUniformCube(Vector3 offset, Vector2[] texture, int indiciesOffset, out uint[] indicies, Color color)
         {
-            indicies = new ushort[6 * 6];
+            indicies = new uint[6 * 6];
             var verticies = new Vertex[4 * 6];
-            ushort[] _indicies;
+            uint[] _indicies;
             int textureIndex = 0;
             for (int _side = 0; _side < 6; _side++)
             {
@@ -60,9 +60,9 @@ namespace TrueCraft.Client.Rendering
         }
 
         protected static Vertex[] CreateQuad(CubeFace face, Vector3 offset, Vector2[] texture, int textureOffset,
-            int indiciesOffset, out ushort[] indicies, Color color)
+            int indiciesOffset, out uint[] indicies, Color color)
         {
-            indicies = new ushort[] { 0, 1, 3, 1, 2, 3 };
+            indicies = new uint[] { 0, 1, 3, 1, 2, 3 };
             for (int i = 0; i < indicies.Length; i++)
                 indicies[i] += (ushort)(((int)face * 4) + indiciesOffset);
             var quad = new Vertex[4];

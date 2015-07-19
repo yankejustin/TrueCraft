@@ -35,7 +35,7 @@ namespace TrueCraft.Client.Rendering.Blocks
         }
 
         public override Vertex[] Render(BlockDescriptor descriptor, Vector3 offset,
-            Tuple<int, int> textureMap, int indiciesOffset, out ushort[] indicies)
+            Tuple<int, int> textureMap, int indiciesOffset, out uint[] indicies)
         {
             // Wheat is rendered by rendering the four vertical faces of a cube, then moving them
             // towards the middle. We also render a second set of four faces so that you can see
@@ -43,9 +43,9 @@ namespace TrueCraft.Client.Rendering.Blocks
             var texture = Textures[0];
             if (descriptor.Metadata < Textures.Length)
                 texture = Textures[descriptor.Metadata];
-            indicies = new ushort[4 * 2 * 6];
+            indicies = new uint[4 * 2 * 6];
             var verticies = new Vertex[4 * 2 * 6];
-            ushort[] _indicies;
+            uint[] _indicies;
             for (int _side = 0; _side < 4; _side++) // Y faces are the last two in the CubeFace enum, so we can just iterate to 4
             {
                 var side = (CubeFace)_side;

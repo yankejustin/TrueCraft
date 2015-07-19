@@ -13,7 +13,7 @@ namespace TrueCraft.Client.Rendering
     {
         public ReadOnlyChunk Chunk { get; set; }
 
-        public ChunkMesh(ReadOnlyChunk chunk, TrueCraftGame game, Vertex[] vertices, ushort[] indices)
+        public ChunkMesh(ReadOnlyChunk chunk, TrueCraftGame game, Vertex[] vertices, uint[] indices)
             : base(1)
         {
             Chunk = chunk;
@@ -30,7 +30,7 @@ namespace TrueCraft.Client.Rendering
         /// <param name="opaqueIndices"></param>
         /// <param name="transparentIndices"></param>
         public ChunkMesh(ReadOnlyChunk chunk, TrueCraftGame game,
-            Vertex[] vertices, ushort[] opaqueIndices, ushort[] transparentIndices)
+            Vertex[] vertices, uint[] opaqueIndices, uint[] transparentIndices)
             : base(2)
         {
             Chunk = chunk;

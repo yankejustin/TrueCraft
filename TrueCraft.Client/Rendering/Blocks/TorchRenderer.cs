@@ -51,7 +51,7 @@ namespace TrueCraft.Client.Rendering.Blocks
         };
 
         public override Vertex[] Render(BlockDescriptor descriptor, Vector3 offset,
-             Tuple<int, int> textureMap, int indiciesOffset, out ushort[] indicies)
+             Tuple<int, int> textureMap, int indiciesOffset, out uint[] indicies)
         {
             var overhead = new Vector3(0.5f, 0.5f, 0.5f);
             var centerized = new Vector3(7f / 16f, 0, 7f / 16f);

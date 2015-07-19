@@ -76,8 +76,8 @@ namespace TrueCraft.Client.Rendering
         private class RenderState
         {
             public readonly List<Vertex> Verticies = new List<Vertex>();
-            public readonly List<ushort> OpaqueIndicies = new List<ushort>();
-            public readonly List<ushort> TransparentIndicies = new List<ushort>();
+            public readonly List<uint> OpaqueIndicies = new List<uint>();
+            public readonly List<uint> TransparentIndicies = new List<uint>();
             public readonly HashSet<Coordinates3D> DrawableCoordinates = new HashSet<Coordinates3D>();
         }
 
@@ -139,7 +139,7 @@ namespace TrueCraft.Client.Rendering
                 var provider = BlockRepository.GetBlockProvider(descriptor.ID);
                 if (provider.RenderOpaque)
                 {
-                    ushort[] i;
+                    uint[] i;
                     var v = BlockRenderer.RenderBlock(provider, descriptor,
                         new Vector3(chunk.X * Chunk.Width + coords.X, coords.Y, chunk.Z * Chunk.Depth + coords.Z),
                         state.Verticies.Count, out i);
@@ -148,7 +148,7 @@ namespace TrueCraft.Client.Rendering
                 }
                 else
                 {
-                    ushort[] i;
+                    uint[] i;
                     var v = BlockRenderer.RenderBlock(provider, descriptor,
                         new Vector3(chunk.X * Chunk.Width + coords.X, coords.Y, chunk.Z * Chunk.Depth + coords.Z),
                         state.Verticies.Count, out i);

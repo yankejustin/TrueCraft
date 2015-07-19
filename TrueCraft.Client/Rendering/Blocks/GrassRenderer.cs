@@ -93,7 +93,7 @@ namespace TrueCraft.Client.Rendering.Blocks
         public static readonly Color BiomeColor = new Color(105, 169, 63);
 
         public override Vertex[] Render(BlockDescriptor descriptor, TrueCraft.Client.Maths.Vector3 offset,
-            Tuple<int, int> textureMap, int indiciesOffset, out ushort[] indicies)
+            Tuple<int, int> textureMap, int indiciesOffset, out uint[] indicies)
         {
             var texture = Texture;
             if (descriptor.Coordinates.Y < World.Height)

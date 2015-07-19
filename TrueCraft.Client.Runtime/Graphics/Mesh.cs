@@ -75,14 +75,14 @@ namespace TrueCraft.Client.Graphics
             _isDisposed = false;
         }
 
-        public Mesh(Vertex[] vertices, ushort[] indices, bool isDynamic = false)
+        public Mesh(Vertex[] vertices, uint[] indices, bool isDynamic = false)
             : this(1, isDynamic)
         {
             Vertices = vertices;
             SetSubmesh(0, indices);
         }
 
-        public void SetSubmesh(int index, ushort[] indices)
+        public void SetSubmesh(int index, uint[] indices)
         {
             if (_isDisposed)
                 throw new ObjectDisposedException(GetType().Name);
@@ -130,7 +130,7 @@ namespace TrueCraft.Client.Graphics
             GL.DrawElements(
                 PrimitiveType.Triangles,
                 _indices[index].Length,
-                DrawElementsType.UnsignedShort,
+                DrawElementsType.UnsignedInt,
                 (int)IntPtr.Zero);
             OpenGLException.CheckErrors();
         }

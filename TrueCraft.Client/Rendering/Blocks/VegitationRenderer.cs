@@ -101,7 +101,7 @@ namespace TrueCraft.Client.Rendering.Blocks
         }
 
         public override Vertex[] Render(BlockDescriptor descriptor, Vector3 offset,
-            Tuple<int, int> textureMap, int indiciesOffset, out ushort[] indicies)
+            Tuple<int, int> textureMap, int indiciesOffset, out uint[] indicies)
         {
             if (descriptor.ID == RoseBlock.BlockID)
                 return RenderQuads(descriptor, offset, RoseTexture, indiciesOffset, out indicies, Color.White);

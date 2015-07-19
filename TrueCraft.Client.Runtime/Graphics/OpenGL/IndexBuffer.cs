@@ -121,7 +121,7 @@ namespace TrueCraft.Client.Graphics.OpenGL
         /// 
         /// </summary>
         /// <param name="data"></param>
-        public void SetData(ushort[] data)
+        public void SetData(uint[] data)
         {
             if (IsDisposed)
                 throw new ObjectDisposedException(GetType().Name);
@@ -131,9 +131,9 @@ namespace TrueCraft.Client.Graphics.OpenGL
 
             _length = data.Length;
 
-            GL.BufferData<ushort>(
+            GL.BufferData<uint>(
                 BufferTarget.ElementArrayBuffer,
-                new IntPtr(data.Length * sizeof(ushort)),
+                new IntPtr(data.Length * sizeof(uint)),
                 data,
                 (BufferUsageHint)_usage);
             OpenGLException.CheckErrors();
