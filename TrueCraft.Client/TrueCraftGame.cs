@@ -89,8 +89,9 @@ namespace TrueCraft.Client
             if(TextureMapper.TryGetTexture("terrain.png", out texture))
             {
                 basicEffect.MakeCurrent();
-                var textureUniform = basicEffect.GetUniform<Texture>("un_Diffuse");
                 texture.Bind();
+
+                var textureUniform = basicEffect.GetUniform<Texture>("un_Diffuse");
                 textureUniform.SetValue(texture);
             }
 

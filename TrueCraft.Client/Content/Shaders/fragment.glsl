@@ -11,5 +11,8 @@ out vec4 gl_Color;
 void main()
 {
 	vec4 texColor = texture(un_Diffuse, out_TexCoord0);
-	gl_Color = vec4(texColor.rgb, 1.0) + vec4(out_Color.rgb, 1.0);
+	if (texColor.a <= 0.5)
+		discard;
+		
+	gl_Color = vec4(texColor.xyz, 1.0);
 }

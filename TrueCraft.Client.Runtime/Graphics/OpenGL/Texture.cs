@@ -29,6 +29,7 @@ namespace TrueCraft.Client.Graphics.OpenGL
         {
             if (unit == -1)
                 return;
+
             if ((unit < 0) || (unit >= Texture.Units))
                 throw new ArgumentException();
 
@@ -60,9 +61,11 @@ namespace TrueCraft.Client.Graphics.OpenGL
             {
                 if (IsDisposed)
                     throw new ObjectDisposedException(GetType().Name);
+
                 if (this._unit == -1)
                     return false;
-                return (_bound[this._unit] == this);
+                else
+                    return (_bound[this._unit] == this);
             }
         }
 
@@ -129,10 +132,11 @@ namespace TrueCraft.Client.Graphics.OpenGL
 
             if (IsBound)
             {
+                SwitchUnit(this._unit);
+
                 _bound[this._unit] = null;
                 this._unit = -1;
 
-                SwitchUnit(this._unit);
                 GL.BindTexture(
                     (OpenTK.Graphics.OpenGL.TextureTarget)Target,
                     (int)IntPtr.Zero);

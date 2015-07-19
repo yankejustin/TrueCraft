@@ -44,8 +44,10 @@ namespace TrueCraft.Client.Graphics.OpenGL
         public static Texture2D FromFile(string path)
         {
             var texture = new Texture2D();
+            texture.Bind();
             using (var image = Image.FromFile(path))
                 texture.SetBitmap((Bitmap)image);
+            texture.Unbind();
             return texture;
         }
 
@@ -85,14 +87,23 @@ namespace TrueCraft.Client.Graphics.OpenGL
                 SystemPixelFormat.Format32bppArgb);
 
             GL.TexImage2D(
-                (OpenTK.Graphics.OpenGL.TextureTarget)Target,
+                OpenTK.Graphics.OpenGL.TextureTarget.Texture2D,
                 0,
                 PixelInternalFormat.Rgba,
                 image.Width, image.Height,
                 0,
                 OpenTKPixelFormat.Bgra,
-                PixelType.Byte,
+                PixelType.UnsignedByte,
                 imageData.Scan0);
+            GL.TexParameter(
+                OpenTK.Graphics.OpenGL.TextureTarget.Texture2D,
+                TextureParameterName.TextureMagFilter,
+                (int)TextureMagFilter.Nearest);
+            GL.TexParameter(
+                OpenTK.Graphics.OpenGL.TextureTarget.Texture2D,
+                TextureParameterName.TextureMinFilter,
+                (int)TextureMinFilter.Nearest);
+            OpenGLException.CheckErrors();
 
             image.UnlockBits(imageData);
         }
