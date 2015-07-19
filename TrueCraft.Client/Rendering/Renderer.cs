@@ -74,7 +74,9 @@ namespace TrueCraft.Client.Rendering
             if (_isDisposed)
                 throw new ObjectDisposedException(GetType().Name);
 
-            if (_isRunning) return;
+            if (_isRunning)
+                return;
+
             lock (_syncLock)
             {
                 _isRunning = true;
@@ -131,13 +133,14 @@ namespace TrueCraft.Client.Rendering
             if (_isDisposed)
                 throw new ObjectDisposedException(GetType().Name);
 
-            if (!_isRunning) return;
-            lock (_syncLock)
-            {
-                _isRunning = false;
-                for (int i = 0; i < _rendererThreads.Length; i++)
-                    _rendererThreads[i].Join();
-            }
+            if (!_isRunning)
+                return;
+
+            // Boolean reads/writes are atomic, and waiting for the rendering
+            // threads to exit inside a lock is a race condition.
+            _isRunning = false;
+            for (int i = 0; i < _rendererThreads.Length; i++)
+                _rendererThreads[i].Join();
         }
 
         /// <summary>
@@ -150,7 +153,9 @@ namespace TrueCraft.Client.Rendering
             if (_isDisposed)
                 throw new ObjectDisposedException(GetType().Name);
 
-            if (!_isRunning) return;
+            if (!_isRunning)
+                return;
+
             lock (_syncLock)
             {
                 if (hasPriority)

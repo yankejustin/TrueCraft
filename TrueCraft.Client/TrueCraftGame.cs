@@ -13,6 +13,7 @@ using TrueCraft.Client.Input;
 using TrueCraft.Core;
 using TrueCraft.Client.Graphics;
 using OpenTK.Graphics.OpenGL;
+using TrueCraft.Client.Events;
 
 namespace TrueCraft.Client
 {
@@ -52,7 +53,7 @@ namespace TrueCraft.Client
         private void Initialize()
         {
             ChunkConverter = new ChunkRenderer(this, Client.World.World.BlockRepository);
-            Client.ChunkLoaded += (sender, e) => ChunkConverter.Enqueue(e.Chunk);
+            Client.ChunkLoaded += Client_ChunkLoaded;
             //Client.ChunkModified += (sender, e) => ChunkConverter.Enqueue(e.Chunk, true);
             ChunkConverter.MeshCompleted += ChunkConverter_MeshGenerated;
             ChunkConverter.Start();
@@ -60,6 +61,11 @@ namespace TrueCraft.Client
             Client.Connect(EndPoint);
             LoadContent();
             GL.ClearColor(System.Drawing.Color.CornflowerBlue);
+        }
+
+        void Client_ChunkLoaded(object sender, ChunkEventArgs e)
+        {
+            ChunkConverter.Enqueue(e.Chunk);
         }
 
         void ChunkConverter_MeshGenerated(object sender, RendererEventArgs<ReadOnlyChunk> e)
@@ -133,6 +139,7 @@ namespace TrueCraft.Client
 
         protected override void OnUnload(object sender, EventArgs e)
         {
+            Client.ChunkLoaded -= Client_ChunkLoaded;
             ChunkConverter.Dispose();
 
             // Cleans up various runtime components (and should be run last).
