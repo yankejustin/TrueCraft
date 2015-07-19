@@ -61,7 +61,7 @@ namespace TrueCraft.Client.Rendering.Blocks
             for (int i = 0; i < verticies.Length; i++)
                 verticies[i].Position += correction;
             for (int i = 0; i < indicies.Length; i++)
-                indicies[i] -= (ushort)faceCorrection;
+                indicies[i] -= (uint)faceCorrection;
             return verticies;
         }
     }
