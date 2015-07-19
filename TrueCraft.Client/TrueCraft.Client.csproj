@@ -63,6 +63,7 @@
     <Compile Include="Rendering\Renderer.cs" />
     <Compile Include="Rendering\RendererEventArgs.cs" />
     <Compile Include="Rendering\TextureMapper.cs" />
+    <Compile Include="TestGame.cs" />
     <Compile Include="TrueCraftGame.cs" />
     <Compile Include="MultiplayerClient.cs" />
     <Compile Include="Handlers\PacketHandlers.cs" />

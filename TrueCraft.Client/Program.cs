@@ -16,9 +16,11 @@ namespace TrueCraft.Client
         {
             AppDomain.CurrentDomain.AssemblyResolve += AppDomain_CurrentDomain_AssemblyResolve;
 
+            using (var game = new TestGame())
+                game.Run(args);
             // We need to run this in another method to avoid referencing MonoGame before registering
             // our AssemblyResolve handler
-            Main_Thread(args);
+            // Main_Thread(args);
         }
 
         static Assembly AppDomain_CurrentDomain_AssemblyResolve (object sender, ResolveEventArgs args)
