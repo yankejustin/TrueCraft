@@ -58,16 +58,17 @@ namespace TrueCraft.Client.Rendering
             Coordinates3D.West
         };
 
-        protected override bool TryRender(ReadOnlyChunk item, out Func<Mesh> meshFactory)
+        protected override bool TryRender(ReadOnlyChunk item, out Lazy<Mesh> meshFactory)
         {
             var state = new RenderState();
             ProcessChunk(item, state);
 
-            meshFactory = () =>
+            meshFactory = new Lazy<Mesh>(() =>
             {
+                System.Diagnostics.Debug.Print("Mesh was lazily initialized @ " + System.Threading.Thread.CurrentThread.Name);
                 return new ChunkMesh(item, Game, state.Verticies.ToArray(),
                     state.OpaqueIndicies.ToArray(), state.TransparentIndicies.ToArray());
-            };
+            });
 
             return true;
         }

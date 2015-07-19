@@ -120,7 +120,7 @@ namespace TrueCraft.Client.Graphics
                 GL.EnableVertexAttribArray(1);
                 GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, true, 36, 12);
                 GL.EnableVertexAttribArray(2);
-                GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Byte, true, 36, 24);
+                GL.VertexAttribPointer(2, 4, VertexAttribPointerType.UnsignedByte, true, 36, 24);
                 GL.EnableVertexAttribArray(3);
                 GL.VertexAttribPointer(3, 2, VertexAttribPointerType.Float, false, 36, 28);
                 OpenGLException.CheckErrors();

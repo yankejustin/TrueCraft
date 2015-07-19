@@ -14,5 +14,5 @@ void main()
 	if (texColor.a <= 0.5)
 		discard;
 		
-	gl_Color = vec4(texColor.xyz, 1.0);
+	gl_Color = vec4(texColor.xyz, 1.0) * vec4(out_Color.rgb, 1.0);
 }

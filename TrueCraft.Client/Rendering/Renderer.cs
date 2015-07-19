@@ -94,7 +94,7 @@ namespace TrueCraft.Client.Rendering
             while (_isRunning)
             {
                 var item = default(T);
-                var result = default(Func<Mesh>);
+                var result = default(Lazy<Mesh>);
 
                 lock (_syncLock)
                 {
@@ -123,7 +123,7 @@ namespace TrueCraft.Client.Rendering
         /// <param name="item"></param>
         /// <param name="meshFactory"></param>
         /// <returns></returns>
-        protected abstract bool TryRender(T item, out Func<Mesh> meshFactory);
+        protected abstract bool TryRender(T item, out Lazy<Mesh> meshFactory);
 
         /// <summary>
         /// Stops this renderer.

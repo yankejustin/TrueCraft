@@ -27,7 +27,7 @@ namespace TrueCraft.Client
         private DateTime NextPhysicsUpdate { get; set; }
         private List<Mesh> ChunkMeshes { get; set; }
         public ConcurrentBag<Action> PendingMainThreadActions { get; set; }
-        private ConcurrentBag<Mesh> IncomingChunks { get; set; }
+        private ConcurrentBag<Lazy<Mesh>> IncomingChunks { get; set; }
         private TextureMapper TextureMapper { get; set; }
         private Camera Camera { get; set; }
         private Maths.BoundingFrustum CameraFrustum { get; set; }
@@ -42,7 +42,7 @@ namespace TrueCraft.Client
             EndPoint = endPoint;
             NextPhysicsUpdate = DateTime.MinValue;
             ChunkMeshes = new List<Mesh>();
-            IncomingChunks = new ConcurrentBag<Mesh>();
+            IncomingChunks = new ConcurrentBag<Lazy<Mesh>>();
             PendingMainThreadActions = new ConcurrentBag<Action>();
             Camera = new Camera(Window.Width / Window.Height, 70.0f, 0.25f, 1000.0f);
             // UpdateCamera();
@@ -110,6 +110,9 @@ namespace TrueCraft.Client
             LoadContent();
             TKOpenGL.GL.ClearColor(System.Drawing.Color.CornflowerBlue);
             TKOpenGL.GL.Enable(TKOpenGL.EnableCap.DepthTest);
+
+            var vao = TKOpenGL.GL.GenVertexArray();
+            TKOpenGL.GL.BindVertexArray(vao);
         }
 
         void Client_ChunkLoaded(object sender, ChunkEventArgs e)
@@ -119,10 +122,7 @@ namespace TrueCraft.Client
 
         void ChunkConverter_MeshGenerated(object sender, RendererEventArgs<ReadOnlyChunk> e)
         {
-            PendingMainThreadActions.Add(() =>
-            {
-                IncomingChunks.Add(e.Result);
-            });
+            IncomingChunks.Add(e.Result);
         }
 
         void HandleClientPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -150,10 +150,6 @@ namespace TrueCraft.Client
 
         protected override void OnUpdate(object sender, FrameEventArgs e)
         {
-            Mesh mesh;
-            while (IncomingChunks.TryTake(out mesh))
-                ChunkMeshes.Add(mesh);
-
             Action action;
             if (PendingMainThreadActions.TryTake(out action))
                 action();
@@ -179,6 +175,12 @@ namespace TrueCraft.Client
 
         protected override void OnRender(object sender, FrameEventArgs e)
         {
+            // We lazily initialize meshes on the main thread.
+            Lazy<Mesh> mesh;
+            while (IncomingChunks.TryTake(out mesh))
+                ChunkMeshes.Add(mesh.Value);
+
+            // Clear the backbuffer.
             TKOpenGL.GL.Clear(
                 TKOpenGL.ClearBufferMask.ColorBufferBit |
                 TKOpenGL.ClearBufferMask.DepthBufferBit);
