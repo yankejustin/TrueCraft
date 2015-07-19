@@ -112,19 +112,20 @@ namespace TrueCraft.Client.Graphics
             if ((index < 0) || (index > _indices.Length))
                 throw new ArgumentException();
 
-            if (!_vertices.IsBound)
-            {
+            //if (!_vertices.IsBound)
+            //{
                 _vertices.Bind();
                 GL.EnableVertexAttribArray(0);
-                GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, Marshal.SizeOf(typeof(Vertex)), 0);
+                GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 36, 0);
                 GL.EnableVertexAttribArray(1);
-                GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, Marshal.SizeOf(typeof(Vertex)), 12);
+                GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, true, 36, 12);
                 GL.EnableVertexAttribArray(2);
-                GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Byte, false, Marshal.SizeOf(typeof(Vertex)), 24);
+                GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Byte, true, 36, 24);
                 GL.EnableVertexAttribArray(3);
-                GL.VertexAttribPointer(3, 2, VertexAttribPointerType.Float, false, Marshal.SizeOf(typeof(Vertex)), 28);
+                GL.VertexAttribPointer(3, 2, VertexAttribPointerType.Float, false, 36, 28);
                 OpenGLException.CheckErrors();
-            }
+            //}
+
             _indices[index].Bind();
             GL.DrawElements(
                 PrimitiveType.Triangles,

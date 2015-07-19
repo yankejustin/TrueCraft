@@ -256,7 +256,6 @@ namespace TrueCraft.Client.Graphics.OpenGL
         /// <param name="name"></param>
         /// <returns></returns>
         public Uniform<T> GetUniform<T>(string name)
-            where T : struct
         {
             var result = default(IUniform);
             if (!_uniforms.TryGetValue(name, out result))

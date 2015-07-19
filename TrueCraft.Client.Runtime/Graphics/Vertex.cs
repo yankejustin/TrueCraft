@@ -17,7 +17,8 @@ namespace TrueCraft.Client.Graphics
         public static readonly Vertex Empty = new Vertex(
             Vector3.Zero, Vector3.Zero, Color.White, Vector2.Zero);
 
-        public Vector3 Position, Normal;
+        public Vector3 Position;
+        public Vector3 Normal;
         public Color Color;
         public Vector2 TexCoord;
 

@@ -68,8 +68,8 @@ namespace TrueCraft.Client
             base.OnLoad(sender, e);
 
             Initialize();
-            CreateShaders();
             LoadContent();
+            CreateShaders();
         }
 
         private void CreateShaders()
@@ -84,6 +84,16 @@ namespace TrueCraft.Client
 
             var basicEffect = new ShaderProgram(vertex, fragment);
             basicEffect.Link();
+            
+            var texture = default(Texture2D);
+            if(TextureMapper.TryGetTexture("terrain.png", out texture))
+            {
+                basicEffect.MakeCurrent();
+                var textureUniform = basicEffect.GetUniform<Texture>("un_Diffuse");
+                texture.Bind();
+                textureUniform.SetValue(texture);
+            }
+
             BasicEffect = basicEffect;
         }
 
@@ -98,6 +108,7 @@ namespace TrueCraft.Client
             Client.Connect(EndPoint);
             LoadContent();
             TKOpenGL.GL.ClearColor(System.Drawing.Color.CornflowerBlue);
+            TKOpenGL.GL.Enable(TKOpenGL.EnableCap.DepthTest);
         }
 
         void Client_ChunkLoaded(object sender, ChunkEventArgs e)
@@ -170,6 +181,9 @@ namespace TrueCraft.Client
             TKOpenGL.GL.Clear(
                 TKOpenGL.ClearBufferMask.ColorBufferBit |
                 TKOpenGL.ClearBufferMask.DepthBufferBit);
+
+            // Bind our texture to the first texture unit.
+            TextureMapper.GetTexture("terrain.png").Bind(0);
 
             // Make our basic shader program current and update our camera.
             BasicEffect.MakeCurrent();

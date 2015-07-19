@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 using OpenTK;
 using OpenTK.Graphics;
@@ -15,6 +16,7 @@ namespace TrueCraft.Client.Graphics.OpenGL
         /// <summary>
         /// 
         /// </summary>
+        [Conditional("DEBUG")]
         internal static void CheckErrors()
         {
             var error = (ErrorCode)GL.GetError();

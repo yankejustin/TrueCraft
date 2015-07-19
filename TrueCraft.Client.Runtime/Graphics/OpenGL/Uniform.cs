@@ -12,7 +12,7 @@ namespace TrueCraft.Client.Graphics.OpenGL
     /// 
     /// </summary>
     public sealed class Uniform<T>
-        : IUniform where T : struct
+        : IUniform
     {
         /// <summary>
         /// 
@@ -21,7 +21,6 @@ namespace TrueCraft.Client.Graphics.OpenGL
         /// <param name="value"></param>
         /// <returns></returns>
         private static TOut TryCast<TOut>(T value)
-            where TOut : struct
         {
             if (value is TOut)
                 return ((TOut)(object)value);
@@ -82,9 +81,10 @@ namespace TrueCraft.Client.Graphics.OpenGL
             if (_parent.IsDisposed)
                 throw new InvalidOperationException();
 
-            GL.GetUniformLocation(
+            var hdl = GL.GetUniformLocation(
                 (int)_parent.Handle,
                 _name);
+            this._handle = new IntPtr(hdl);
         }
 
         /// <summary>
@@ -124,7 +124,12 @@ namespace TrueCraft.Client.Graphics.OpenGL
             else if (value is Matrix)
             {
                 var cast = TryCast<Matrix>(value);
-                GL.UniformMatrix4((int)_handle, 16, false, cast.ToArray());
+                GL.UniformMatrix4((int)_handle, 1, false, cast.ToArray());
+            }
+            else if (value is Texture)
+            {
+                var cast = TryCast<Texture>(value);
+                GL.Uniform1((int)_handle, (int)cast.Unit);
             }
             else
                 throw new NotSupportedException();

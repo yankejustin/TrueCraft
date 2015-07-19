@@ -69,7 +69,7 @@ namespace TrueCraft.Client.Rendering
                     state.OpaqueIndicies.ToArray(), state.TransparentIndicies.ToArray());
             };
 
-            return (meshFactory != null);
+            return true;
         }
 
         private class RenderState
