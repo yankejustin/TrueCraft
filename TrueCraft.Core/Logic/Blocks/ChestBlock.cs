@@ -11,7 +11,7 @@ using TrueCraft.Core.Entities;
 
 namespace TrueCraft.Core.Logic.Blocks
 {
-    public class ChestBlock : BlockProvider, ICraftingRecipe
+    public class ChestBlock : BlockProvider, ICraftingRecipe, IBurnableItem
     {
         public static readonly byte BlockID = 0x36;
         
@@ -26,6 +26,16 @@ namespace TrueCraft.Core.Logic.Blocks
         public override bool Opaque { get { return false; } }
         
         public override string DisplayName { get { return "Chest"; } }
+
+        public TimeSpan BurnTime { get { return TimeSpan.FromSeconds(15); } }
+
+        public override SoundEffectClass SoundEffect
+        {
+            get
+            {
+                return SoundEffectClass.Wood;
+            }
+        }
 
         public override Tuple<int, int> GetTextureMap(byte metadata)
         {

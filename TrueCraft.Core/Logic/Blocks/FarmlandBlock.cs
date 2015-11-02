@@ -30,11 +30,19 @@ namespace TrueCraft.Core.Logic.Blocks
 
         public override byte Luminance { get { return 0; } }
 
-        public override bool Opaque { get { return true; } } // TODO: Distinguish between opaque and instantly destroyable
+        public override bool Opaque { get { return true; } }
 
         public override byte LightOpacity { get { return 255; } }
         
         public override string DisplayName { get { return "Farmland"; } }
+
+        public override SoundEffectClass SoundEffect
+        {
+            get
+            {
+                return SoundEffectClass.Gravel;
+            }
+        }
 
         protected override ItemStack[] GetDrop(BlockDescriptor descriptor, ItemStack item)
         {
@@ -86,8 +94,8 @@ namespace TrueCraft.Core.Logic.Blocks
                 world.SetMetadata(coords, meta);
             }
             var chunk = world.FindChunk(coords);
-            server.Scheduler.ScheduleEvent(chunk,
-                DateTime.UtcNow.AddSeconds(UpdateIntervalSeconds),
+            server.Scheduler.ScheduleEvent("farmland", chunk,
+                TimeSpan.FromSeconds(UpdateIntervalSeconds),
                 _server => HydrationCheckEvent(_server, coords, world));
         }
 
@@ -98,16 +106,16 @@ namespace TrueCraft.Core.Logic.Blocks
                 world.SetMetadata(descriptor.Coordinates, 1);
             }
             var chunk = world.FindChunk(descriptor.Coordinates);
-            user.Server.Scheduler.ScheduleEvent(chunk,
-                DateTime.UtcNow.AddSeconds(UpdateIntervalSeconds),
+            user.Server.Scheduler.ScheduleEvent("farmland", chunk,
+                TimeSpan.FromSeconds(UpdateIntervalSeconds),
                 server => HydrationCheckEvent(server, descriptor.Coordinates, world));
         }
 
         public override void BlockLoadedFromChunk(Coordinates3D coords, IMultiplayerServer server, IWorld world)
         {
             var chunk = world.FindChunk(coords);
-            server.Scheduler.ScheduleEvent(chunk,
-                DateTime.UtcNow.AddSeconds(UpdateIntervalSeconds),
+            server.Scheduler.ScheduleEvent("farmland", chunk,
+                TimeSpan.FromSeconds(UpdateIntervalSeconds),
                 s => HydrationCheckEvent(s, coords, world));
         }
     }

@@ -3,7 +3,7 @@ using TrueCraft.API.Logic;
 
 namespace TrueCraft.Core.Logic.Blocks
 {
-    public class WoodBlock : BlockProvider
+    public class WoodBlock : BlockProvider, IBurnableItem
     {
         public enum WoodType
         {
@@ -23,6 +23,18 @@ namespace TrueCraft.Core.Logic.Blocks
         public override byte Luminance { get { return 0; } }
         
         public override string DisplayName { get { return "Wood"; } }
+
+        public override bool Flammable { get { return true; } }
+
+        public TimeSpan BurnTime { get { return TimeSpan.FromSeconds(15); } }
+
+        public override SoundEffectClass SoundEffect
+        {
+            get
+            {
+                return SoundEffectClass.Wood;
+            }
+        }
 
         public override Tuple<int, int> GetTextureMap(byte metadata)
         {

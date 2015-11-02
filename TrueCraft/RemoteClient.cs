@@ -208,10 +208,12 @@ namespace TrueCraft
         public void OpenWindow(IWindow window)
         {
             CurrentWindow = window;
+            window.Client = this;
             window.ID = NextWindowID++;
             if (NextWindowID < 0) NextWindowID = 1;
             QueuePacket(new OpenWindowPacket(window.ID, window.Type, window.Name, (sbyte)window.MinecraftWasWrittenByFuckingIdiotsLength));
             QueuePacket(new WindowItemsPacket(window.ID, window.GetSlots()));
+            window.WindowChange += HandleWindowChange;
         }
 
         public void CloseWindow(bool clientInitiated = false)
@@ -392,7 +394,7 @@ namespace TrueCraft
                 {
                     ChunkRadius++;
                     UpdateChunks();
-                    server.Scheduler.ScheduleEvent(this, DateTime.UtcNow.AddSeconds(1), ExpandChunkRadius);
+                    server.Scheduler.ScheduleEvent("remote.chunks", this, TimeSpan.FromSeconds(1), ExpandChunkRadius);
                 }
             });
         }
@@ -400,7 +402,7 @@ namespace TrueCraft
         internal void SendKeepAlive(IMultiplayerServer server)
         {
             QueuePacket(new KeepAlivePacket());
-            server.Scheduler.ScheduleEvent(this, DateTime.UtcNow.AddSeconds(1), SendKeepAlive);
+            server.Scheduler.ScheduleEvent("remote.keepalive", this, TimeSpan.FromSeconds(10), SendKeepAlive);
         }
 
         internal void UpdateChunks()
@@ -476,8 +478,14 @@ namespace TrueCraft
 
         void HandleWindowChange(object sender, WindowChangeEventArgs e)
         {
-            if (e.SlotIndex != InventoryWindow.CraftingOutputIndex) // Because Minecraft is stupid
-                QueuePacket(new SetSlotPacket(0, (short)e.SlotIndex, e.Value.ID, e.Value.Count, e.Value.Metadata));
+            if (!(sender is InventoryWindow))
+            {
+                QueuePacket(new SetSlotPacket((sender as IWindow).ID, (short)e.SlotIndex, e.Value.ID, e.Value.Count, e.Value.Metadata));
+                return;
+            }
+
+            QueuePacket(new SetSlotPacket(0, (short)e.SlotIndex, e.Value.ID, e.Value.Count, e.Value.Metadata));
+
             if (e.SlotIndex == SelectedSlot)
             {
                 var notified = Server.GetEntityManagerForWorld(World).ClientsForEntity(Entity);

@@ -25,7 +25,23 @@ namespace TrueCraft.Core.Logic.Blocks
         
         public override string DisplayName { get { return "Sign"; } }
 
+        public override SoundEffectClass SoundEffect
+        {
+            get
+            {
+                return SoundEffectClass.Wood;
+            }
+        }
+
         public override BoundingBox? BoundingBox { get { return null; } }
+
+        public override BoundingBox? InteractiveBoundingBox
+        {
+            get
+            {
+                return new BoundingBox(new Vector3(6 / 16.0, 0, 6 / 16.0), new Vector3(10 / 16.0, 10 / 16.0, 10 / 16.0));
+            }
+        }
 
         public override Tuple<int, int> GetTextureMap(byte metadata)
         {

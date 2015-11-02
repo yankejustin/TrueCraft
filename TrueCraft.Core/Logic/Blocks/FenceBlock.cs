@@ -5,7 +5,7 @@ using TrueCraft.Core.Logic.Items;
 
 namespace TrueCraft.Core.Logic.Blocks
 {
-    public class FenceBlock : BlockProvider, ICraftingRecipe
+    public class FenceBlock : BlockProvider, ICraftingRecipe, IBurnableItem
     {
         public static readonly byte BlockID = 0x55;
         
@@ -18,8 +18,20 @@ namespace TrueCraft.Core.Logic.Blocks
         public override byte Luminance { get { return 0; } }
 
         public override bool Opaque { get { return false; } }
+
+        public override bool Flammable { get { return true; } }
         
         public override string DisplayName { get { return "Fence"; } }
+
+        public TimeSpan BurnTime { get { return TimeSpan.FromSeconds(15); } }
+
+        public override SoundEffectClass SoundEffect
+        {
+            get
+            {
+                return SoundEffectClass.Wood;
+            }
+        }
 
         public override Tuple<int, int> GetTextureMap(byte metadata)
         {

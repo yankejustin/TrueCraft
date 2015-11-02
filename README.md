@@ -1,10 +1,12 @@
-# TrueCraft [![Build Status](https://travis-ci.org/SirCmpwn/TrueCraft.svg?branch=master)](https://travis-ci.org/SirCmpwn/TrueCraft)
-
-http://truecraft.io - blog, account registration, etc
+![](https://sr.ht/3O-k.png)
 
 A completely [clean-room](https://en.wikipedia.org/wiki/Clean_room_design) implementation of Minecraft beta 1.7.3 (circa September 2011). No decompiled code has been used in the development of this software. This is an **implementation** - not a clone. TrueCraft is compatible with Minecraft beta 1.7.3 clients and servers.
 
-![](https://sr.ht/7614.png)
+[![Build Status](https://travis-ci.org/SirCmpwn/TrueCraft.svg?branch=master)](https://travis-ci.org/SirCmpwn/TrueCraft) [![Donate with fosspay](https://drewdevault.com/donate/static/donate-with-fosspay.png)](https://drewdevault.com/donate?project=1)
+
+![](https://sr.ht/1U9R.png)
+
+*Screenshot taken with [Eldpack](http://eldpack.com/)*
 
 I miss the old days of Minecraft, when it was a simple game. It was nearly perfect. Most of what Mojang has added since beta 1.7.3 is fluff, life support for a game that was "done" years ago. This is my attempt to get back to the original spirit of Minecraft, before there were things like the End, or all-in-one redstone devices, or village gift shops. A simple sandbox where you can build and explore and fight with your friends. I miss that.
 
@@ -40,7 +42,7 @@ If you are a dirty dev, you are more limited in how you can help. You can work o
 
 ## Assets
 
-TrueCraft is compatible with Minecraft beta 1.7.3 texture packs. We ship one of our own, based on [Programmer Art](https://github.com/deathcap/ProgrammerArt). You can install the official assets through the TrueCraft launcher if you wish.
+TrueCraft is compatible with Minecraft beta 1.7.3 texture packs. We ship the Pixeludi Pack (by Wojtek Mroczek) by default. You can install the Mojang assets through the TrueCraft launcher if you wish.
 
 ## Blah blah blah
 

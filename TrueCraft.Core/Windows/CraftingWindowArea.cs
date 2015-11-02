@@ -8,6 +8,7 @@ namespace TrueCraft.Core.Windows
     {
         public static readonly int CraftingOutput = 0;
         public ICraftingRepository Repository { get; set; }
+        public bool Process { get; set; }
 
         public CraftingWindowArea(ICraftingRepository repository, int startIndex, int width = 2, int height = 2)
             : base(startIndex, width * height + 1, width, height)
@@ -18,6 +19,8 @@ namespace TrueCraft.Core.Windows
 
         private void HandleWindowChange(object sender, WindowChangeEventArgs e)
         {
+            if (Repository == null)
+                return;
             var current = Repository.GetRecipe(Bench);
             if (e.SlotIndex == CraftingOutput)
             {

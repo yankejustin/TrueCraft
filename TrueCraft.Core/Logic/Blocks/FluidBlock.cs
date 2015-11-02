@@ -69,9 +69,11 @@ namespace TrueCraft.Core.Logic.Blocks
 
         public void ScheduleNextEvent(Coordinates3D coords, IWorld world, IMultiplayerServer server)
         {
+            if (world.GetBlockID(coords) == StillID)
+                return;
             var chunk = world.FindChunk(coords);
-            server.Scheduler.ScheduleEvent(chunk,
-                DateTime.UtcNow.AddSeconds(SecondsBetweenUpdates), (_server) =>
+            server.Scheduler.ScheduleEvent("fluid", chunk,
+                TimeSpan.FromSeconds(SecondsBetweenUpdates), (_server) =>
                 AutomataUpdate(_server, world, coords));
         }
 
@@ -110,8 +112,8 @@ namespace TrueCraft.Core.Logic.Blocks
             if (again)
             {
                 var chunk = world.FindChunk(coords);
-                server.Scheduler.ScheduleEvent(chunk,
-                    DateTime.UtcNow.AddSeconds(SecondsBetweenUpdates), (_server) =>
+                server.Scheduler.ScheduleEvent("fluid", chunk,
+                    TimeSpan.FromSeconds(SecondsBetweenUpdates), (_server) =>
                     AutomataUpdate(_server, world, coords));
             }
         }
@@ -165,9 +167,14 @@ namespace TrueCraft.Core.Logic.Blocks
             world.SetBlockID(target.TargetBlock, FlowingID);
             world.SetMetadata(target.TargetBlock, target.Level);
             var chunk = world.FindChunk(target.TargetBlock);
-            server.Scheduler.ScheduleEvent(chunk,
-                DateTime.UtcNow.AddSeconds(SecondsBetweenUpdates),
+            server.Scheduler.ScheduleEvent("fluid", chunk,
+                TimeSpan.FromSeconds(SecondsBetweenUpdates),
                 s => AutomataUpdate(s, world, target.TargetBlock));
+            if (FlowingID == LavaBlock.BlockID)
+            {
+                (BlockRepository.GetBlockProvider(FireBlock.BlockID) as FireBlock).ScheduleUpdate(
+                    server, world, world.GetBlockData(target.TargetBlock));
+            }
         }
 
         /// <summary>

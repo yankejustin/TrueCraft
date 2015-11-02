@@ -126,39 +126,27 @@ namespace TrueCraft.Client.Rendering
         /// Applies this camera to the specified effect.
         /// </summary>
         /// <param name="effect">The effect to apply this camera to.</param>
-        public void ApplyTo(BasicEffect effect)
+        public void ApplyTo(IEffectMatrices effectMatrices)
         {
             if (_isDirty)
                 Recalculate();
 
-            effect.View = _view;
-            effect.Projection = _projection;
-            effect.World = Matrix.Identity;
-        }
-
-        /// <summary>
-        /// Applies this camera to the specified effect.
-        /// </summary>
-        /// <param name="effect">The effect to apply this camera to.</param>
-        public void ApplyTo(AlphaTestEffect effect)
-        {
-            if (_isDirty)
-                Recalculate();
-
-            effect.View = _view;
-            effect.Projection = _projection;
-            effect.World = Matrix.Identity;
+            effectMatrices.View = _view;
+            effectMatrices.Projection = _projection;
         }
 
         /// <summary>
         /// Returns the bounding frustum calculated for this camera.
         /// </summary>
         /// <returns></returns>
-        public BoundingFrustum GetFrustum()
+        public BoundingFrustum Frustum
         {
-            if (_isDirty)
-                Recalculate();
-            return _frustum;
+            get
+            {
+                if (_isDirty)
+                    Recalculate();
+                return _frustum;
+            }
         }
 
         /// <summary>
@@ -188,17 +176,16 @@ namespace TrueCraft.Client.Rendering
         /// </summary>
         private void Recalculate()
         {
-            var origin = new Microsoft.Xna.Framework.Vector3(
+            var origin = new Vector3(
                 (float)this._position.X,
                 (float)this._position.Y,
                 (float)this._position.Z);
 
-            var direction = Microsoft.Xna.Framework.Vector3.Transform(
-                -Microsoft.Xna.Framework.Vector3.UnitZ,
+            var direction = Vector3.Transform(Vector3.UnitZ,
                 Matrix.CreateRotationX(MathHelper.ToRadians(_pitch)) *
-                Matrix.CreateRotationY(MathHelper.ToRadians(_yaw)));
+                Matrix.CreateRotationY(MathHelper.ToRadians(-(_yaw - 180) + 180)));
 
-            _view = Matrix.CreateLookAt(origin, origin + direction, Microsoft.Xna.Framework.Vector3.Up);
+            _view = Matrix.CreateLookAt(origin, origin + direction, Vector3.Up);
             _projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(_fov), _aspectRatio, _nearZ, _farZ);
             _frustum.Matrix = _view * _projection;
             _isDirty = false;

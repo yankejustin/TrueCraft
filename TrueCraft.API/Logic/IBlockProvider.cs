@@ -6,7 +6,7 @@ using fNbt;
 
 namespace TrueCraft.API.Logic
 {
-    public interface IBlockProvider
+    public interface IBlockProvider : IItemProvider
     {
         byte ID { get; }
         double BlastResistance { get; }
@@ -16,10 +16,13 @@ namespace TrueCraft.API.Logic
         bool RenderOpaque { get; }
         byte LightOpacity { get; }
         bool DiffuseSkyLight { get; }
+        bool Flammable { get; }
+        SoundEffectClass SoundEffect { get; }
         ToolMaterial EffectiveToolMaterials { get; }
         ToolType EffectiveTools { get; }
         string DisplayName { get; }
         BoundingBox? BoundingBox { get; } // NOTE: Will this eventually need to be metadata-aware?
+        BoundingBox? InteractiveBoundingBox { get; } // NOTE: Will this eventually need to be metadata-aware?
         Tuple<int, int> GetTextureMap(byte metadata);
         void GenerateDropEntity(BlockDescriptor descriptor, IWorld world, IMultiplayerServer server, ItemStack heldItem);
         void BlockLeftClicked(BlockDescriptor descriptor, BlockFace face, IWorld world, IRemoteClient user);

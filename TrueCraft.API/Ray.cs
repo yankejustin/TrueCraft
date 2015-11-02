@@ -77,10 +77,9 @@ namespace TrueCraft.API
         /// <summary>
         /// Returns the distance along the ray where it intersects the specified bounding box, if it intersects at all.
         /// </summary>
-        /// <param name="box">The bounding box to check intersection with.</param>
-        /// <returns></returns>
-        public double? Intersects(BoundingBox box)
+        public double? Intersects(BoundingBox box, out BlockFace face)
         {
+            face = BlockFace.PositiveY;
             //first test if start in box
             if (Position.X >= box.Min.X
                     && Position.X <= box.Max.X
@@ -94,18 +93,29 @@ namespace TrueCraft.API
             Vector3 maxT = new Vector3(-1.0f);
             //Vector3 minT = new Vector3(-1.0f);
             //calcul intersection with each faces
-            if (Position.X < box.Min.X && Direction.X != 0.0f)
-                maxT.X = (box.Min.X - Position.X) / Direction.X;
-            else if (Position.X > box.Max.X && Direction.X != 0.0f)
-                maxT.X = (box.Max.X - Position.X) / Direction.X;
-            if (Position.Y < box.Min.Y && Direction.Y != 0.0f)
-                maxT.Y = (box.Min.Y - Position.Y) / Direction.Y;
-            else if (Position.Y > box.Max.Y && Direction.Y != 0.0f)
-                maxT.Y = (box.Max.Y - Position.Y) / Direction.Y;
-            if (Position.Z < box.Min.Z && Direction.Z != 0.0f)
-                maxT.Z = (box.Min.Z - Position.Z) / Direction.Z;
-            else if (Position.Z > box.Max.Z && Direction.Z != 0.0f)
-                maxT.Z = (box.Max.Z - Position.Z) / Direction.Z;
+            if (Direction.X != 0.0f)
+            {
+                if (Position.X < box.Min.X)
+                    maxT.X = (box.Min.X - Position.X) / Direction.X;
+                else if (Position.X > box.Max.X)
+                    maxT.X = (box.Max.X - Position.X) / Direction.X;
+            }
+
+            if (Direction.Y != 0.0f)
+            {
+                if (Position.Y < box.Min.Y)
+                    maxT.Y = (box.Min.Y - Position.Y) / Direction.Y;
+                else if (Position.Y > box.Max.Y)
+                    maxT.Y = (box.Max.Y - Position.Y) / Direction.Y;
+            }
+
+            if (Direction.Z != 0.0f)
+            {
+                if (Position.Z < box.Min.Z)
+                    maxT.Z = (box.Min.Z - Position.Z) / Direction.Z;
+                else if (Position.Z > box.Max.Z)
+                    maxT.Z = (box.Max.Z - Position.Z) / Direction.Z;
+            }
 
             //get the maximum maxT
             if (maxT.X > maxT.Y && maxT.X > maxT.Z)
@@ -120,6 +130,12 @@ namespace TrueCraft.API
                 coord = Position.Y + maxT.X * Direction.Y;
                 if (coord < box.Min.Y || coord > box.Max.Y)
                     return null;
+
+                if (Position.X < box.Min.X)
+                    face = BlockFace.NegativeX;
+                else if (Position.X > box.Max.X)
+                    face = BlockFace.PositiveX;
+
                 return maxT.X;
             }
             if (maxT.Y > maxT.X && maxT.Y > maxT.Z)
@@ -134,6 +150,12 @@ namespace TrueCraft.API
                 coord = Position.X + maxT.Y * Direction.X;
                 if (coord < box.Min.X || coord > box.Max.X)
                     return null;
+
+                if (Position.Y < box.Min.Y)
+                    face = BlockFace.NegativeY;
+                else if (Position.Y > box.Max.Y)
+                    face = BlockFace.PositiveY;
+
                 return maxT.Y;
             }
             else //Z
@@ -148,6 +170,12 @@ namespace TrueCraft.API
                 coord = Position.Y + maxT.Z * Direction.Y;
                 if (coord < box.Min.Y || coord > box.Max.Y)
                     return null;
+
+                if (Position.Z < box.Min.Z)
+                    face = BlockFace.NegativeZ;
+                else if (Position.Z > box.Max.Z)
+                    face = BlockFace.PositiveZ;
+
                 return maxT.Z;
             }
         }

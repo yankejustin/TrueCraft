@@ -29,8 +29,13 @@ namespace TrueCraft.Client.Rendering
         {
             Defaults.Clear();
 
-            Defaults.Add("items.png", new PngReader().Read(File.OpenRead("Content/items.png"), graphicsDevice));
             Defaults.Add("terrain.png", new PngReader().Read(File.OpenRead("Content/terrain.png"), graphicsDevice));
+            Defaults.Add("gui/items.png", new PngReader().Read(File.OpenRead("Content/items.png"), graphicsDevice));
+            Defaults.Add("gui/gui.png", new PngReader().Read(File.OpenRead("Content/gui.png"), graphicsDevice));
+            Defaults.Add("gui/icons.png", new PngReader().Read(File.OpenRead("Content/icons.png"), graphicsDevice));
+            Defaults.Add("gui/crafting.png", new PngReader().Read(File.OpenRead("Content/crafting.png"), graphicsDevice));
+            Defaults.Add("gui/furnace.png", new PngReader().Read(File.OpenRead("Content/furnace.png"), graphicsDevice));
+            Defaults.Add("gui/inventory.png", new PngReader().Read(File.OpenRead("Content/inventory.png"), graphicsDevice));
         }
 
         /// <summary>
@@ -91,7 +96,7 @@ namespace TrueCraft.Client.Rendering
             // they're unimportant as we can just use default textures.
             try
             {
-                var archive = new ZipFile(Path.Combine(TexturePack.TexturePackPath, texturePack.Name));
+                var archive = new ZipFile(Path.Combine(Paths.TexturePacks, texturePack.Name));
                 foreach (var entry in archive.Entries)
                 {
                     var key = entry.FileName;
@@ -101,11 +106,12 @@ namespace TrueCraft.Client.Rendering
                         {
                             try
                             {
-                                var ms = new MemoryStream();
-                                CopyStream(stream, ms);
-                                ms.Seek(0, SeekOrigin.Begin);
-                                AddTexture(key, new PngReader().Read(ms, Device));
-                                ms.Dispose();
+                                using (var ms = new MemoryStream())
+                                {
+                                    CopyStream(stream, ms);
+                                    ms.Seek(0, SeekOrigin.Begin);
+                                    AddTexture(key, new PngReader().Read(ms, Device));
+                                }
                             }
                             catch (Exception ex) { Console.WriteLine("Exception occured while loading {0} from texture pack:\n\n{1}", key, ex); }
                         }
@@ -184,7 +190,6 @@ namespace TrueCraft.Client.Rendering
             foreach (var pair in Customs)
                 pair.Value.Dispose();
 
-            Customs.Clear();
             Customs = null;
             Device = null;
             IsDisposed = true;

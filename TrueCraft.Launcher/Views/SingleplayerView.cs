@@ -66,8 +66,8 @@ namespace TrueCraft.Launcher.Views
 
             BackButton.Clicked += (sender, e) =>
             {
-                Window.MainContainer.Remove(this);
-                Window.MainContainer.PackEnd(Window.MainMenuView);
+                Window.InteractionBox.Remove(this);
+                Window.InteractionBox.PackEnd(Window.MainMenuView);
             };
             CreateWorldButton.Clicked += (sender, e) =>
             {
@@ -152,11 +152,11 @@ namespace TrueCraft.Launcher.Views
                     process.EnableRaisingEvents = true;
                     process.Exited += (s, a) => Application.Invoke(() =>
                     {
-                        Server.Stop();
-                        Server.World.Save();
                         ProgressBar.Visible = ProgressLabel.Visible = false;
                         Window.Show();
                         Window.ShowInTaskbar = true;
+                        Server.Stop();
+                        Server.World.Save();
                     });
                     process.Start();
                     Window.ShowInTaskbar = false;

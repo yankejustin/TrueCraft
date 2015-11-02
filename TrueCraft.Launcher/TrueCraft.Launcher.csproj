@@ -3,8 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{6604F17A-552E-405D-B327-37C8B1648C86}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>TrueCraft.Launcher</RootNamespace>
@@ -20,6 +18,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -28,6 +27,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -65,6 +65,7 @@
     <Content Include="Content\default-pack.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Content\truecraft_logo.png" />
     <Content Include="Xwt.Gtk.dll.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -104,6 +105,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Content\truecraft-logo.png" />
     <EmbeddedResource Include="Content\default-server-icon.png" />
+    <None Include="Content\truecraft_logo.svg" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(OS)' == 'UNIX' ">
     <PostBuildEvent>rm $(TargetDir)/MonoGame.Framework.dll &amp;&amp; cp $(SolutionDir)/packages/MonoGame.Framework.Linux.3.4.0.459/lib/net40/MonoGame.Framework.dll $(TargetDir)/MonoGame.Framework.Linux.dll &amp;&amp; cp $(SolutionDir)/packages/MonoGame.Framework.WindowsGL.3.4.0.459/lib/net40/MonoGame.Framework.dll $(TargetDir)/MonoGame.Framework.Windows.dll &amp;&amp; cp $(SolutionDir)/packages/MonoGame.Framework.MacOS.3.4.0.459/lib/net40/MonoGame.Framework.dll $(TargetDir)/MonoGame.Framework.MacOS.dll</PostBuildEvent>
@@ -113,5 +115,13 @@
 copy $(SolutionDir)packages\MonoGame.Framework.Linux.3.4.0.459\lib\net40\MonoGame.Framework.dll $(TargetDir)MonoGame.Framework.Linux.dll
 copy $(SolutionDir)packages\MonoGame.Framework.WindowsGL.3.4.0.459\lib\net40\MonoGame.Framework.dll $(TargetDir)MonoGame.Framework.Windows.dll
 copy $(SolutionDir)packages\MonoGame.Framework.MacOS.3.4.0.459\lib\net40\MonoGame.Framework.dll $(TargetDir)MonoGame.Framework.MacOS.dll </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Optimized Debug|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Optimized Debug</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 </Project>

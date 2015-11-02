@@ -21,6 +21,7 @@ namespace TrueCraft.Core.Entities
         {
             Position = position;
             Item = item;
+            Velocity = new Vector3(MathHelper.Random.NextDouble() * 0.25 - 0.125, 0.25, MathHelper.Random.NextDouble() * 0.25 - 0.125);
             if (item.Empty)
                 Despawned = true;
         }
@@ -54,7 +55,10 @@ namespace TrueCraft.Core.Entities
 
         public void TerrainCollision(Vector3 collisionPoint, Vector3 collisionDirection)
         {
-            // This space intentionally left blank
+            if (collisionDirection == Vector3.Down)
+            {
+                Velocity = Vector3.Zero;
+            }
         }
 
         public override byte EntityType
@@ -103,7 +107,7 @@ namespace TrueCraft.Core.Entities
             if ((DateTime.UtcNow - SpawnTime).TotalSeconds > 1)
             {
                 var player = nearbyEntities.FirstOrDefault(e => e is PlayerEntity && (e as PlayerEntity).Health != 0
-                                 && e.Position.DistanceTo(Position) <= PickupRange);
+                    && e.Position.DistanceTo(Position) <= PickupRange);
                 if (player != null)
                 {
                     var playerEntity = player as PlayerEntity;
@@ -118,7 +122,7 @@ namespace TrueCraft.Core.Entities
 
         public float AccelerationDueToGravity
         {
-            get { return 16f; }
+            get { return 1.98f; }
         }
 
         public float Drag

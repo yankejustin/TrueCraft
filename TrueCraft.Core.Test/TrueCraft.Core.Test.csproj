@@ -3,8 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BCFDCD93-C23E-49E6-9767-A887B3C2A709}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>TrueCraft.Core.Test</RootNamespace>
@@ -28,6 +26,11 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Optimized Debug|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Optimized Debug</OutputPath>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

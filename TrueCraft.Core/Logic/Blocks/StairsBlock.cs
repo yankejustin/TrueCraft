@@ -57,7 +57,7 @@ namespace TrueCraft.Core.Logic.Blocks
         }
     }
 
-    public class WoodenStairsBlock : StairsBlock, ICraftingRecipe
+    public class WoodenStairsBlock : StairsBlock, ICraftingRecipe, IBurnableItem
     {
         public static readonly byte BlockID = 0x35;
         
@@ -66,6 +66,18 @@ namespace TrueCraft.Core.Logic.Blocks
         public override double BlastResistance { get { return 15; } }
         
         public override string DisplayName { get { return "Wooden Stairs"; } }
+
+        public override bool Flammable { get { return true; } }
+
+        public TimeSpan BurnTime { get { return TimeSpan.FromSeconds(15); } }
+
+        public override SoundEffectClass SoundEffect
+        {
+            get
+            {
+                return SoundEffectClass.Wood;
+            }
+        }
 
         public ItemStack[,] Pattern
         {

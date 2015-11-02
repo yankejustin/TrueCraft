@@ -16,10 +16,16 @@ namespace TrueCraft.Client.Handlers
             client.RegisterPacketHandler(new ChatMessagePacket().ID, HandleChatMessage);
             client.RegisterPacketHandler(new SetPlayerPositionPacket().ID, HandlePositionAndLook);
             client.RegisterPacketHandler(new LoginResponsePacket().ID, HandleLoginResponse);
+            client.RegisterPacketHandler(new UpdateHealthPacket().ID, HandleUpdateHealth);
 
-            client.RegisterPacketHandler(new ChunkPreamblePacket().ID, ChunkHandler.HandleChunkPreamble);
-            client.RegisterPacketHandler(new ChunkDataPacket().ID, ChunkHandler.HandleChunkData);
-            client.RegisterPacketHandler(new BlockChangePacket().ID, ChunkHandler.HandleBlockChange);
+            client.RegisterPacketHandler(new ChunkPreamblePacket().ID, ChunkHandlers.HandleChunkPreamble);
+            client.RegisterPacketHandler(new ChunkDataPacket().ID, ChunkHandlers.HandleChunkData);
+            client.RegisterPacketHandler(new BlockChangePacket().ID, ChunkHandlers.HandleBlockChange);
+
+            client.RegisterPacketHandler(new WindowItemsPacket().ID, InventoryHandlers.HandleWindowItems);
+            client.RegisterPacketHandler(new SetSlotPacket().ID, InventoryHandlers.HandleSetSlot);
+            client.RegisterPacketHandler(new CloseWindowPacket().ID, InventoryHandlers.HandleCloseWindowPacket);
+            client.RegisterPacketHandler(new OpenWindowPacket().ID, InventoryHandlers.HandleOpenWindowPacket);
         }
 
         public static void HandleChatMessage(IPacket _packet, MultiplayerClient client)
@@ -42,6 +48,8 @@ namespace TrueCraft.Client.Handlers
 
         public static void HandleLoginResponse(IPacket _packet, MultiplayerClient client)
         {
+            var packet = (LoginResponsePacket)_packet;
+            client.EntityID = packet.EntityID;
             client.QueuePacket(new PlayerGroundedPacket());
         }
 
@@ -52,6 +60,12 @@ namespace TrueCraft.Client.Handlers
             client.QueuePacket(packet);
             client.LoggedIn = true;
             // TODO: Pitch and yaw
+        }
+
+        public static void HandleUpdateHealth(IPacket _packet, MultiplayerClient client)
+        {
+            var packet = (UpdateHealthPacket)_packet;
+            client.Health = packet.Health;
         }
     }
 }

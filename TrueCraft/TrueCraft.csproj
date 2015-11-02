@@ -7,8 +7,6 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>TrueCraft</RootNamespace>
     <AssemblyName>TrueCraft</AssemblyName>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -17,11 +15,22 @@
     <WarningLevel>4</WarningLevel>
     <DebugSymbols>true</DebugSymbols>
     <ConsolePause>false</ConsolePause>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Optimized Debug|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Optimized Debug</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -29,7 +38,7 @@
       <HintPath>..\lib\Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
     <Reference Include="YamlDotNet">
-      <HintPath>..\packages\YamlDotNet.3.6.1\lib\net35\YamlDotNet.dll</HintPath>
+      <HintPath>..\packages\YamlDotNet.3.7.0\lib\net35\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -55,7 +64,6 @@
     <Compile Include="Handlers\InteractionHandlers.cs" />
     <Compile Include="Commands\DebugCommands.cs" />
     <Compile Include="Exceptions\PlayerDisconnectException.cs" />
-    <Compile Include="CraftingRepository.cs" />
     <Compile Include="ServerConfiguration.cs" />
     <Compile Include="MobManager.cs" />
     <Compile Include="Rules\OverworldSpawnRules.cs" />
@@ -74,11 +82,15 @@
       <Project>{4488498D-976D-4DA3-BF72-109531AF0488}</Project>
       <Name>fNbt</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\TrueCraft.Profiling\TrueCraft.Profiling.csproj">
+      <Project>{BCA0E139-CF47-43B3-9DC9-D4611C0A2AAD}</Project>
+      <Name>TrueCraft.Profiling</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Rules\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

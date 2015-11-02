@@ -15,6 +15,10 @@ using System.ComponentModel;
 using System.IO;
 using TrueCraft.Core;
 using TrueCraft.API.Physics;
+using TrueCraft.Core.Physics;
+using TrueCraft.Core.Windows;
+using TrueCraft.API.Windows;
+using TrueCraft.API.Logic;
 
 namespace TrueCraft.Client
 {
@@ -29,17 +33,33 @@ namespace TrueCraft.Client
         public event PropertyChangedEventHandler PropertyChanged;
 
         private long connected;
+        private int hotbarSelection;
 
         public TrueCraftUser User { get; set; }
         public ReadOnlyWorld World { get; private set; }
         public PhysicsEngine Physics { get; set; }
         public bool LoggedIn { get; internal set; }
+        public int EntityID { get; internal set; }
+        public InventoryWindow Inventory { get; set; }
+        public int Health { get; set; }
+        public IWindow CurrentWindow { get; set; }
+        public ICraftingRepository CraftingRepository { get; set; }
 
         public bool Connected
         {
             get
             {
                 return Interlocked.Read(ref connected) == 1;
+            }
+        }
+
+        public int HotbarSelection
+        {
+            get { return hotbarSelection; }
+            set
+            {
+                hotbarSelection = value;
+                QueuePacket(new ChangeHeldItemPacket() { Slot = (short)value });
             }
         }
 
@@ -64,14 +84,19 @@ namespace TrueCraft.Client
             PacketHandlers = new PacketHandler[0x100];
             Handlers.PacketHandlers.RegisterHandlers(this);
             World = new ReadOnlyWorld();
+            Inventory = new InventoryWindow(null);
             var repo = new BlockRepository();
             repo.DiscoverBlockProviders();
             World.World.BlockRepository = repo;
             World.World.ChunkProvider = new EmptyGenerator();
-            Physics = new PhysicsEngine(World, repo);
+            Physics = new PhysicsEngine(World.World, repo);
             SocketPool = new SocketAsyncEventArgsPool(100, 200, 65536);
             connected = 0;
             cancel = new CancellationTokenSource();
+            Health = 20;
+            var crafting = new CraftingRepository();
+            CraftingRepository = crafting;
+            crafting.DiscoverRecipes();
         }
 
         public void RegisterPacketHandler(byte packetId, PacketHandler handler)
@@ -255,7 +280,8 @@ namespace TrueCraft.Client
         {
             get
             {
-                return new BoundingBox(Position, Position + Size);
+                var pos = Position - new Vector3(Width / 2, 0, Depth / 2);
+                return new BoundingBox(pos, pos + Size);
             }
         }
 
@@ -292,7 +318,8 @@ namespace TrueCraft.Client
             {
                 if (_Position != value)
                 {
-                    QueuePacket(new PlayerPositionAndLookPacket(value.X, value.Y, value.Y + Height, value.Z, Yaw, Pitch, false));
+                    QueuePacket(new PlayerPositionAndLookPacket(value.X, value.Y, value.Y + Height,
+                        value.Z, Yaw, Pitch, false));
                     if (PropertyChanged != null)
                         PropertyChanged(this, new PropertyChangedEventArgs("Position"));
                 }
@@ -306,7 +333,7 @@ namespace TrueCraft.Client
         {
             get
             {
-                return 0.08f;
+                return 1.6f;
             }
         }
 
@@ -314,7 +341,7 @@ namespace TrueCraft.Client
         {
             get
             {
-                return 0.02f;
+                return 0.40f;
             }
         }
 
@@ -322,7 +349,7 @@ namespace TrueCraft.Client
         {
             get
             {
-                return 3.92f;
+                return 78.4f;
             }
         }
 

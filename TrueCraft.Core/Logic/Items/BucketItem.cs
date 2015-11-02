@@ -13,6 +13,11 @@ namespace TrueCraft.Core.Logic.Items
 
         public override short ID { get { return 0x145; } }
 
+        public override Tuple<int, int> GetIconTexture(byte metadata)
+        {
+            return new Tuple<int, int>(10, 4);
+        }
+
         public override string DisplayName { get { return "Bucket"; } }
 
         protected virtual byte? RelevantBlockType { get { return null; } }
@@ -63,13 +68,15 @@ namespace TrueCraft.Core.Logic.Items
         }
     }
 
-    public class LavaBucketItem : BucketItem
+    public class LavaBucketItem : BucketItem, IBurnableItem
     {
         public static readonly new short ItemID = 0x147;
 
         public override short ID { get { return 0x147; } }
 
         public override string DisplayName { get { return "Lava Bucket"; } }
+
+        public TimeSpan BurnTime { get { return TimeSpan.FromSeconds(1000); } }
 
         protected override byte? RelevantBlockType
         {

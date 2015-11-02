@@ -1,11 +1,13 @@
 ﻿using System;
+using TrueCraft.API.Networking;
 
 namespace TrueCraft.API.Windows
 {
-    public interface IWindow : IDisposable
+    public interface IWindow : IDisposable, IEventSubject
     {
         event EventHandler<WindowChangeEventArgs> WindowChange;
 
+        IRemoteClient Client { get; set; }
         IWindowArea[] WindowAreas { get; }
         sbyte ID { get; set; }
         string Name { get; }
@@ -14,6 +16,7 @@ namespace TrueCraft.API.Windows
         int MinecraftWasWrittenByFuckingIdiotsLength { get; }
         ItemStack this[int index] { get; set; }
         bool Empty { get; }
+        short[] ReadOnlySlots { get; }
 
         /// <summary>
         /// Call this to "shift+click" an item from one area to another.

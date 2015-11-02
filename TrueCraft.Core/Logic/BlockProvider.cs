@@ -24,7 +24,9 @@ namespace TrueCraft.Core.Logic
 
         public virtual void BlockLeftClicked(BlockDescriptor descriptor, BlockFace face, IWorld world, IRemoteClient user)
         {
-            // This space intentionally left blank
+            var coords = descriptor.Coordinates + MathHelper.BlockFaceToCoordinates(face);
+            if (world.IsValidPosition(coords) && world.GetBlockID(coords) == FireBlock.BlockID)
+                world.SetBlockID(coords, 0);
         }
 
         public virtual bool BlockRightClicked(BlockDescriptor descriptor, BlockFace face, IWorld world, IRemoteClient user)
@@ -95,9 +97,11 @@ namespace TrueCraft.Core.Logic
 
         protected virtual ItemStack[] GetDrop(BlockDescriptor descriptor, ItemStack item)
         {
-            short meta = 0;
+            short meta;
             if (this is ICraftingRecipe)
                 meta = (short)((this as ICraftingRecipe).SignificantMetadata ? descriptor.Metadata : 0);
+            else
+                meta = descriptor.Metadata;
             return new[] { new ItemStack(descriptor.ID, 1, meta) };
         }
 
@@ -111,54 +115,60 @@ namespace TrueCraft.Core.Logic
             // This space intentionally left blank
         }
 
+        public static readonly byte[] Overwritable =
+        {
+            AirBlock.BlockID,
+            WaterBlock.BlockID,
+            StationaryWaterBlock.BlockID,
+            LavaBlock.BlockID,
+            StationaryLavaBlock.BlockID,
+            SnowfallBlock.BlockID
+        };
+
         public virtual void ItemUsedOnBlock(Coordinates3D coordinates, ItemStack item, BlockFace face, IWorld world, IRemoteClient user)
         {
-            coordinates += MathHelper.BlockFaceToCoordinates(face);
             var old = world.GetBlockData(coordinates);
-            byte[] overwritable =
-                {
-                    AirBlock.BlockID,
-                    WaterBlock.BlockID,
-                    StationaryWaterBlock.BlockID,
-                    LavaBlock.BlockID,
-                    StationaryLavaBlock.BlockID
-                };
-            if (overwritable.Any(b => b == old.ID))
+            if (!Overwritable.Any(b => b == old.ID))
             {
-                // Test for entities
-                var em = user.Server.GetEntityManagerForWorld(world);
-                var entities = em.EntitiesInRange(coordinates, 2);
-                var box = new BoundingBox(coordinates, coordinates + Vector3.One);
-                foreach (var entity in entities)
+                coordinates += MathHelper.BlockFaceToCoordinates(face);
+                old = world.GetBlockData(coordinates);
+                if (!Overwritable.Any(b => b == old.ID))
+                    return;
+            }
+
+            // Test for entities
+            var em = user.Server.GetEntityManagerForWorld(world);
+            var entities = em.EntitiesInRange(coordinates, 2);
+            var box = new BoundingBox(coordinates, coordinates + Vector3.One);
+            foreach (var entity in entities)
+            {
+                var aabb = entity as IAABBEntity;
+                if (aabb != null && !(entity is ItemEntity))
                 {
-                    var aabb = entity as IAABBEntity;
-                    if (aabb != null && !(entity is ItemEntity))
-                    {
-                        if (aabb.BoundingBox.Intersects(box) && false) // TODO: Figure out
-                            return;
-                    }
-                    var player = entity as PlayerEntity; // Players do not implement IAABBEntity
-                    if (player != null)
-                    {
-                        if (new BoundingBox(player.Position, player.Position + player.Size)
-                            .Intersects(box) && false)
-                            return;
-                    }
+                    if (aabb.BoundingBox.Intersects(box) && false) // TODO: Figure out
+                        return;
                 }
-
-                // Place block
-                world.SetBlockID(coordinates, ID);
-                world.SetMetadata(coordinates, (byte)item.Metadata);
-
-                BlockPlaced(world.GetBlockData(coordinates), face, world, user);
-
-                if (!IsSupported(world.GetBlockData(coordinates), user.Server, world))
-                    world.SetBlockData(coordinates, old);
-                else
+                var player = entity as PlayerEntity; // Players do not implement IAABBEntity
+                if (player != null)
                 {
-                    item.Count--;
-                    user.Inventory[user.SelectedSlot] = item;
+                    if (new BoundingBox(player.Position, player.Position + player.Size)
+                        .Intersects(box) && false)
+                        return;
                 }
+            }
+
+            // Place block
+            world.SetBlockID(coordinates, ID);
+            world.SetMetadata(coordinates, (byte)item.Metadata);
+
+            BlockPlaced(world.GetBlockData(coordinates), face, world, user);
+
+            if (!IsSupported(world.GetBlockData(coordinates), user.Server, world))
+                world.SetBlockData(coordinates, old);
+            else
+            {
+                item.Count--;
+                user.Inventory[user.SelectedSlot] = item;
             }
         }
 
@@ -185,10 +195,17 @@ namespace TrueCraft.Core.Logic
         /// </summary>
         public abstract byte ID { get; }
 
+        public virtual Tuple<int, int> GetIconTexture(byte metadata)
+        {
+            return null; // Blocks are rendered in 3D
+        }
+
         public virtual Coordinates3D GetSupportDirection(BlockDescriptor descriptor)
         {
             return Coordinates3D.Zero;
         }
+
+        public virtual SoundEffectClass SoundEffect { get { return SoundEffectClass.Stone; } }
 
         /// <summary>
         /// The maximum amount that can be in a single stack of this block.
@@ -219,6 +236,8 @@ namespace TrueCraft.Core.Logic
         /// Whether or not the block is rendered opaque
         /// </summary>
         public virtual bool RenderOpaque { get { return Opaque; } }
+
+        public virtual bool Flammable { get { return false; } }
 
         /// <summary>
         /// The amount removed from the light level as it passes through this block.
@@ -259,6 +278,14 @@ namespace TrueCraft.Core.Logic
             get
             {
                 return new BoundingBox(Vector3.Zero, Vector3.One);
+            }
+        }
+
+        public virtual BoundingBox? InteractiveBoundingBox
+        {
+            get
+            {
+                return BoundingBox;
             }
         }
 

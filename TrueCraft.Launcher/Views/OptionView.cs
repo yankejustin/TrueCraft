@@ -118,14 +118,14 @@ namespace TrueCraft.Launcher.Views
 
             OpenFolderButton.Clicked += (sender, e) =>
             {
-                var dir = new DirectoryInfo(TexturePack.TexturePackPath);
+                var dir = new DirectoryInfo(Paths.TexturePacks);
                 Process.Start(dir.FullName);
             };
 
             BackButton.Clicked += (sender, e) =>
             {
-                Window.MainContainer.Remove(this);
-                Window.MainContainer.PackEnd(Window.MainMenuView);
+                Window.InteractionBox.Remove(this);
+                Window.InteractionBox.PackEnd(Window.MainMenuView);
             };
 
             OfficialAssetsButton = new Button("Download Minecraft assets") { Visible = false };
@@ -170,14 +170,30 @@ namespace TrueCraft.Launcher.Views
                             var jar = ZipFile.Read(ms);
                             var zip = new ZipFile();
                             zip.AddEntry("pack.txt", "Minecraft textures");
+
+                            string[] dirs = {
+                                "terrain", "gui", "armor", "art",
+                                "environment", "item", "misc", "mob"
+                            };
+
+                            foreach (var entry in jar.Entries)
+                            {
+                                foreach (var c in dirs)
+                                {
+                                    if (entry.FileName.StartsWith(c + "/"))
+                                        CopyBetweenZips(entry.FileName, jar, zip);
+                                }
+                            }
                             CopyBetweenZips("pack.png", jar, zip);
                             CopyBetweenZips("terrain.png", jar, zip);
-                            // TODO: Items, windows, etc
-                            zip.Save(Path.Combine(TexturePack.TexturePackPath, "Minecraft.zip"));
+                            CopyBetweenZips("particles.png", jar, zip);
+
+                            zip.Save(Path.Combine(Paths.TexturePacks, "Minecraft.zip"));
                             Application.Invoke(() =>
                                 {
                                     OfficialAssetsProgress.Visible = false;
-                                    var texturePack = TexturePack.FromArchive(Path.Combine(TexturePack.TexturePackPath, "Minecraft.zip"));
+                                    var texturePack = TexturePack.FromArchive(
+                                        Path.Combine(Paths.TexturePacks, "Minecraft.zip"));
                                     _texturePacks.Add(texturePack);
                                     AddTexturePackRow(texturePack);
                                 });
@@ -224,10 +240,10 @@ namespace TrueCraft.Launcher.Views
             AddTexturePackRow(TexturePack.Default);
 
             // Make sure to create the texture pack directory if there is none.
-            if (!Directory.Exists(TexturePack.TexturePackPath))
-                Directory.CreateDirectory(TexturePack.TexturePackPath);
+            if (!Directory.Exists(Paths.TexturePacks))
+                Directory.CreateDirectory(Paths.TexturePacks);
 
-            var zips = Directory.EnumerateFiles(TexturePack.TexturePackPath);
+            var zips = Directory.EnumerateFiles(Paths.TexturePacks);
             bool officialPresent = false;
             foreach (var zip in zips)
             {

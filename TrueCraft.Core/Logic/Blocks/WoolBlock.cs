@@ -19,6 +19,16 @@ namespace TrueCraft.Core.Logic.Blocks
         
         public override string DisplayName { get { return "Wool"; } }
 
+        public override bool Flammable { get { return true; } }
+
+        public override SoundEffectClass SoundEffect
+        {
+            get
+            {
+                return SoundEffectClass.Cloth;
+            }
+        }
+
         public override Tuple<int, int> GetTextureMap(byte metadata)
         {
             return new Tuple<int, int>(0, 4);
@@ -48,7 +58,7 @@ namespace TrueCraft.Core.Logic.Blocks
         {
             get
             {
-                return false;
+                return true;
             }
         }
     }

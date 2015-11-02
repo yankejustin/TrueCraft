@@ -12,6 +12,7 @@ namespace TrueCraft.Core.Logic.Blocks
     {
         public static readonly int MinGrowthSeconds = 30;
         public static readonly int MaxGrowthSeconds = 120;
+        public static readonly int MaxGrowHeight = 3;
 
         public static readonly byte BlockID = 0x53;
         
@@ -26,6 +27,14 @@ namespace TrueCraft.Core.Logic.Blocks
         public override bool Opaque { get { return false; } }
         
         public override string DisplayName { get { return "Sugar cane"; } }
+
+        public override SoundEffectClass SoundEffect
+        {
+            get
+            {
+                return SoundEffectClass.Grass;
+            }
+        }
 
         public override BoundingBox? BoundingBox
         {
@@ -90,12 +99,12 @@ namespace TrueCraft.Core.Logic.Blocks
                 return;
             // Find current height of stalk
             int height = 0;
-            for (int y = -3; y <= 3; y++)
+            for (int y = -MaxGrowHeight; y <= MaxGrowHeight; y++)
             {
                 if (world.GetBlockID(coords + (Coordinates3D.Down * y)) == BlockID)
                     height++;
             }
-            if (height < 3)
+            if (height < MaxGrowHeight)
             {
                 var meta = world.GetMetadata(coords);
                 meta++;
@@ -103,15 +112,18 @@ namespace TrueCraft.Core.Logic.Blocks
                 var chunk = world.FindChunk(coords);
                 if (meta == 15)
                 {
-                    world.SetBlockID(coords + Coordinates3D.Up, BlockID);
-                    server.Scheduler.ScheduleEvent(chunk,
-                        DateTime.UtcNow.AddSeconds(MathHelper.Random.Next(MinGrowthSeconds, MaxGrowthSeconds)),
-                        (_server) => TryGrowth(_server, coords + Coordinates3D.Up, world));
+                    if (world.GetBlockID(coords + Coordinates3D.Up) == 0)
+                    {
+                        world.SetBlockID(coords + Coordinates3D.Up, BlockID);
+                        server.Scheduler.ScheduleEvent("sugarcane", chunk,
+                            TimeSpan.FromSeconds(MathHelper.Random.Next(MinGrowthSeconds, MaxGrowthSeconds)),
+                            (_server) => TryGrowth(_server, coords + Coordinates3D.Up, world));
+                    }
                 }
                 else
                 {
-                    server.Scheduler.ScheduleEvent(chunk,
-                        DateTime.UtcNow.AddSeconds(MathHelper.Random.Next(MinGrowthSeconds, MaxGrowthSeconds)),
+                    server.Scheduler.ScheduleEvent("sugarcane", chunk,
+                        TimeSpan.FromSeconds(MathHelper.Random.Next(MinGrowthSeconds, MaxGrowthSeconds)),
                         (_server) => TryGrowth(_server, coords, world));
                 }
             }
@@ -120,16 +132,16 @@ namespace TrueCraft.Core.Logic.Blocks
         public override void BlockPlaced(BlockDescriptor descriptor, BlockFace face, IWorld world, IRemoteClient user)
         {
             var chunk = world.FindChunk(descriptor.Coordinates);
-            user.Server.Scheduler.ScheduleEvent(chunk,
-                DateTime.UtcNow.AddSeconds(MathHelper.Random.Next(MinGrowthSeconds, MaxGrowthSeconds)),
+            user.Server.Scheduler.ScheduleEvent("sugarcane", chunk,
+                TimeSpan.FromSeconds(MathHelper.Random.Next(MinGrowthSeconds, MaxGrowthSeconds)),
                 (server) => TryGrowth(server, descriptor.Coordinates, world));
         }
 
         public override void BlockLoadedFromChunk(Coordinates3D coords, IMultiplayerServer server, IWorld world)
         {
             var chunk = world.FindChunk(coords);
-            server.Scheduler.ScheduleEvent(chunk,
-                DateTime.UtcNow.AddSeconds(MathHelper.Random.Next(MinGrowthSeconds, MaxGrowthSeconds)),
+            server.Scheduler.ScheduleEvent("sugarcane", chunk,
+                TimeSpan.FromSeconds(MathHelper.Random.Next(MinGrowthSeconds, MaxGrowthSeconds)),
                 s => TryGrowth(s, coords, world));
         }
     }

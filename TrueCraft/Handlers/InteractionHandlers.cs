@@ -39,7 +39,7 @@ namespace TrueCraft.Handlers
                     var inventory = client.SelectedItem;
                     inventory.Count--;
                     var item = new ItemEntity(client.Entity.Position + new Vector3(0, PlayerEntity.Height, 0), spawned);
-                    item.Velocity = MathHelper.FowardVector(client.Entity.Yaw) * 0.3;
+                    item.Velocity = MathHelper.RotateY(Vector3.Forwards, MathHelper.DegreesToRadians(client.Entity.Yaw)) * 0.5;
                     client.Inventory[client.SelectedSlot] = inventory;
                     server.GetEntityManagerForWorld(client.World).SpawnEntity(item);
                     break;
@@ -201,94 +201,11 @@ namespace TrueCraft.Handlers
                 server.GetEntityManagerForWorld(client.World).SpawnEntity(item);
                 return;
             }
+            var staging = (ItemStack)client.ItemStaging.Clone();
+            Window.HandleClickPacket(packet, window, ref staging);
+            client.ItemStaging = staging;
             if (packet.SlotIndex >= window.Length || packet.SlotIndex < 0)
                 return;
-            ItemStack existing = window[packet.SlotIndex];
-            ItemStack held = client.ItemStaging;
-            if (packet.SlotIndex == InventoryWindow.CraftingOutputIndex
-                && (window is InventoryWindow || window is CraftingBenchWindow))
-            {
-                // Stupid special case because Minecraft was written by morons
-                if (held.ID == existing.ID || held.Empty)
-                {
-                    if (held.Empty)
-                        held = existing;
-                    else
-                        held.Count += existing.Count;
-                    client.ItemStaging = held;
-                    window[packet.SlotIndex] = ItemStack.EmptyStack;
-                }
-                client.QueuePacket(new WindowItemsPacket(packet.WindowID, window.GetSlots()));
-                return;
-            }
-            if (client.ItemStaging.Empty) // Picking up something
-            {
-                if (packet.Shift)
-                {
-                    window.MoveToAlternateArea(packet.SlotIndex);
-                }
-                else
-                {
-                    if (packet.RightClick)
-                    {
-                        sbyte mod = (sbyte)(existing.Count % 2);
-                        existing.Count /= 2;
-                        held = existing;
-                        held.Count += mod;
-                        client.ItemStaging = held;
-                        window[packet.SlotIndex] = existing;
-                    }
-                    else
-                    {
-                        client.ItemStaging = window[packet.SlotIndex];
-                        window[packet.SlotIndex] = ItemStack.EmptyStack;
-                    }
-                }
-            }
-            else // Setting something down
-            {
-                if (existing.Empty) // Replace empty slot
-                {
-                    if (packet.RightClick)
-                    {
-                        var newItem = (ItemStack)client.ItemStaging.Clone();
-                        newItem.Count = 1;
-                        held.Count--;
-                        window[packet.SlotIndex] = newItem;
-                        client.ItemStaging = held;
-                    }
-                    else
-                    {
-                        window[packet.SlotIndex] = client.ItemStaging;
-                        client.ItemStaging = ItemStack.EmptyStack;
-                    }
-                }
-                else
-                {
-                    if (existing.CanMerge(client.ItemStaging)) // Merge items
-                    {
-                        // TODO: Consider the maximum stack size
-                        if (packet.RightClick)
-                        {
-                            existing.Count++;
-                            held.Count--;
-                            window[packet.SlotIndex] = existing;
-                            client.ItemStaging = held;
-                        }
-                        else
-                        {
-                            existing.Count += client.ItemStaging.Count;
-                            window[packet.SlotIndex] = existing;
-                            client.ItemStaging = ItemStack.EmptyStack;
-                        }
-                    }
-                    else // Swap items
-                    {
-                        window[packet.SlotIndex] = client.ItemStaging;
-                        client.ItemStaging = existing;
-                    }
-                }
-            }
             client.QueuePacket(new WindowItemsPacket(packet.WindowID, window.GetSlots()));
         }
 
@@ -322,6 +239,19 @@ namespace TrueCraft.Handlers
                 case PlayerActionPacket.PlayerAction.Uncrouch:
                     entity.EntityFlags &= ~EntityFlags.Crouched;
                     break;
+            }
+        }
+
+        public static void HandleAnimation(IPacket _packet, IRemoteClient _client, IMultiplayerServer server)
+        {
+            var packet = (AnimationPacket)_packet;
+            var client = (RemoteClient)_client;
+            if (packet.EntityID == client.Entity.EntityID)
+            {
+                var nearby = server.GetEntityManagerForWorld(client.World)
+                    .ClientsForEntity(client.Entity);
+                foreach (var player in nearby)
+                    player.QueuePacket(packet);
             }
         }
 

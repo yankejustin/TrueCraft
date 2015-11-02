@@ -4,10 +4,11 @@ using TrueCraft.API;
 using TrueCraft.API.World;
 using TrueCraft.API.Networking;
 using TrueCraft.Core.Windows;
+using TrueCraft.Core.Entities;
 
 namespace TrueCraft.Core.Logic.Blocks
 {
-    public class CraftingTableBlock : BlockProvider, ICraftingRecipe
+    public class CraftingTableBlock : BlockProvider, ICraftingRecipe, IBurnableItem
     {
         public static readonly byte BlockID = 0x3A;
         
@@ -21,10 +22,33 @@ namespace TrueCraft.Core.Logic.Blocks
         
         public override string DisplayName { get { return "Crafting Table"; } }
 
+        public TimeSpan BurnTime { get { return TimeSpan.FromSeconds(15); } }
+
+        public override SoundEffectClass SoundEffect
+        {
+            get
+            {
+                return SoundEffectClass.Wood;
+            }
+        }
+
         public override bool BlockRightClicked(BlockDescriptor descriptor, BlockFace face, IWorld world, IRemoteClient user)
         {
             var window = new CraftingBenchWindow(user.Server.CraftingRepository, (InventoryWindow)user.Inventory);
             user.OpenWindow(window);
+            window.Disposed += (sender, e) =>
+            {
+                var entityManager = user.Server.GetEntityManagerForWorld(world);
+                for (int i = 0; i < window.CraftingGrid.StartIndex + window.CraftingGrid.Length; i++)
+                {
+                    var item = window[i];
+                    if (!item.Empty)
+                    {
+                        var entity = new ItemEntity(descriptor.Coordinates + Coordinates3D.Up, item);
+                        entityManager.SpawnEntity(entity);
+                    }
+                }
+            };
             return false;
         }
 

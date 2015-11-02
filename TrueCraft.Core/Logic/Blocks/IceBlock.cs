@@ -24,6 +24,14 @@ namespace TrueCraft.Core.Logic.Blocks
         
         public override string DisplayName { get { return "Ice"; } }
 
+        public override SoundEffectClass SoundEffect
+        {
+            get
+            {
+                return SoundEffectClass.Glass;
+            }
+        }
+
         public override Tuple<int, int> GetTextureMap(byte metadata)
         {
             return new Tuple<int, int>(3, 4);
@@ -32,6 +40,7 @@ namespace TrueCraft.Core.Logic.Blocks
         public override void BlockMined(BlockDescriptor descriptor, BlockFace face, IWorld world, IRemoteClient user)
         {
             world.SetBlockID(descriptor.Coordinates, WaterBlock.BlockID);
+            BlockRepository.GetBlockProvider(WaterBlock.BlockID).BlockPlaced(descriptor, face, world, user);
         }
     }
 }
